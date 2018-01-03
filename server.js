@@ -1,5 +1,6 @@
 var express = require('express');
 var cors = require('cors');
+const hbs = require('hbs');
 var bodyParser = require('body-parser');
 const axios = require('axios');
 
@@ -7,13 +8,55 @@ var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
 var {ObjectID} = require('mongodb');
 
+const SERVER_PORT = process.env.PORT || 3000;
+
+var familyNamesKey = {
+    'Kenneth Rumball': 'Papa',
+    'Catherine Rumball': 'Grandma',
+    'John Rumball': 'John',
+    'Valerie Rumball': 'Valerie',
+    'Colin Rumball': 'Colin',
+    'Kelsey Rumball': 'Kelsey',
+    'Rick Lean': 'Rick',
+    'Lauralyn Lean': 'Lauralyn',
+    'Alicia Lean': 'Alicia',
+    'Olivia Lean': 'Olivia',
+    'David Rumball': 'Dave',
+    'Kimberley Rumball': 'Kim'
+};
+
+var tagsKey = {
+    'Cute': 'Cute',
+    'Funny': 'Funny',
+    'Heart Warming': 'Heartwarming',
+    'Holidays': 'Holidays',
+    'Birthdays': 'Birthdays',
+    'Sports and Activities': 'Sports'
+};
+
 var app = express();
 
+hbs.registerPartials(__dirname + '/views/partials');
+app.use('/public', express.static(__dirname + '/public'));
+app.set('view engine', 'hbs');
+
+// URL stuff
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-const SERVER_PORT = process.env.PORT || 3000;
+app.get('/', (req, res) => {
+    Clip.find({}).then((mongoClips) => {
+        var clips = createClipsObject(mongoClips);
+        res.render('page.hbs', {clips});
+    });
+});
+
+app.get('/clips', (req, res) => {
+    Clip.find({}).then((clips) => {
+        res.send({clips});
+    });
+});
 
 app.get('/clips/:queries', (req, res) => {
     var queries = req.params.queries;
@@ -28,12 +71,6 @@ app.get('/clips/:queries', (req, res) => {
         entertainmentRating: clipJSON.entertainmentRatings != undefined ? { $in : clipJSON.entertainmentRatings } : undefined,
     });
     Clip.find(JSON.parse(query)).then((clips) => {
-        res.send({clips});
-    });
-});
-
-app.get('/clips', (req, res) => {
-    Clip.find({}).then((clips) => {
         res.send({clips});
     });
 });
@@ -88,3 +125,30 @@ app.post('/clips', (req, res) => {
 app.listen(SERVER_PORT, () => {
     console.log('Started Main Server on port', SERVER_PORT);
 });
+
+var clipSort_year = function(a, b) {
+    return a.year - b.year;
+};
+
+var createClipsObject = function(clips) {
+    if (clips.length > 40)
+    {
+        clips = clips.slice(0, 40);
+    }
+
+    clips.sort(clipSort_year);
+
+    clips.forEach(function(clip) {
+        for (var i = 0; i < clip.familyMembers.length; i++)
+        {
+            clip.familyMembers[i] = ' ' + familyNamesKey[clip.familyMembers[i]];
+        }
+
+        for (var j = 0; j < clip.tags.length; j++)
+        {
+            clip.tags[j] = ' ' + tagsKey[clip.tags[j]];
+        }
+    });
+
+    return clips;
+};

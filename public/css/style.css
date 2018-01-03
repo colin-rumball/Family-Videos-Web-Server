@@ -1,0 +1,398 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* A nice BG gradient */
+html {
+    height: 100%;
+    background: #eeeeee;
+    background-size: cover;
+
+    color: #343434;
+}
+
+/* --------------------------------------------------------------- */
+ /* HEADER */
+
+#page-header {
+    top: 0px;
+    width: 100%;
+    height: 200px;
+
+    background-color: #403545;
+}
+
+#page-header #content {
+    margin: auto;
+    width: 300px;
+    text-align: center;
+
+    padding-top: 20px;
+
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+#page-header #content #image {
+    display: block;
+    margin: auto;
+    width: 40%;
+}
+
+/* --------------------------------------------------------------- */
+/* SIDE BAR */
+
+#sidebar {
+    width: 500px;
+    height: 100%;
+    min-height: 100%;
+    top: 200px;
+
+    background-color: #978F9E;
+}
+
+#sidebar #sidebar-content {
+    width: 70%;
+    margin: auto;
+    height: auto;
+
+    font-size: 22px;
+
+    padding-top: 30px;
+}
+
+#sidebar table {
+    width: 100%;
+}
+
+#sidebar-content h4 {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 26px;
+}
+
+#sidebar fieldset {
+    border-style: none;
+    border-bottom: 2px solid #343434;
+
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+/* --------------------------------------------------------------- */
+/* SIDE BAR ELEMENTS */
+
+/* CLEAR BUTTON */
+
+#sidebar #SearchQuery {
+    width: 100%;
+    height: 30px;
+
+    padding-left: 5px;
+
+    font-size: 24px;
+}
+
+#clearButton-container {
+    width: 90%;
+    height: auto;
+
+    margin: auto;
+    padding: 25px 0px 55px 0px;
+}
+
+#clearButton {
+    width: 100%;
+    height: auto;
+
+    background-color: #343434;
+    border-style: none;
+
+    padding: 5px;
+
+    font-weight: bolder;
+    font-size: 22px;
+    color: white;
+}
+
+#clearButton:hover {
+    background-color: #424242;
+}
+
+#clearButton:active {
+    background-color: #4e4e4e;
+}
+
+/* RADIO BUTTONS */
+
+/* Customize the label (the container) */
+.radiobutton {
+    display: inline-block;
+    position: relative;
+    padding-left: 30px;
+    padding-right: 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    white-space: nowrap;
+
+    margin: auto;
+    overflow: hidden;
+  }
+  
+  /* Hide the browser's default radio button */
+  .radiobutton input {
+    opacity: 0;
+  }
+  
+  /* Create a custom radio button */
+  .radiobutton-inner {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    height: 19px;
+    width: 19px;
+    background-color: #eee;
+    border-radius: 50%;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .radiobutton:hover input ~ .radiobutton-inner {
+    background-color: #ccc;
+  }
+  
+  /* When the radio button is checked, add a background */
+  .radiobutton input:checked ~ .radiobutton-inner {
+    background-color: #eee;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .radiobutton-inner:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .radiobutton input:checked ~ .radiobutton-inner:after {
+    display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .radiobutton .radiobutton-inner:after {
+    border-radius: 50%;
+    background-color: #343434;
+    width: 11px;
+    height: 11px;
+    top: 4px;
+    left: 4px;
+  }
+
+  /* CHECK BOXES */
+
+  /* Customize the label (the container) */
+.checkbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 30px;
+    padding-right: 18px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    white-space: nowrap;
+
+    margin: auto;
+    overflow: hidden;
+  }
+  
+  /* Hide the browser's default radio button */
+  .checkbox input {
+    opacity: 0;
+  }
+  
+  /* Create a custom radio button */
+  .checkbox-inner {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    height: 19px;
+    width: 19px;
+    background-color: #eee;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .checkbox:hover input ~ .checkbox-inner {
+    background-color: #ccc;
+  }
+  
+  /* When the radio button is checked, add a background */
+  .checkbox input:checked ~ .checkbox-inner {
+    background-color: #eee;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkbox-inner:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .checkbox input:checked ~ .checkbox-inner:after {
+    display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .checkbox .checkbox-inner:after {
+    background-color: #343434;
+    width: 11px;
+    height: 11px;
+    top: 4px;
+    left: 4px;
+  }
+
+  td.push-right:nth-child(2) {
+    padding-left: 35px;
+  }
+
+  td.push-left:nth-child(2) {
+    padding-right: 50px;
+  }
+
+/* --------------------------------------------------------------- */
+/* CLIP STUFF */
+
+#clip-list {
+    position: absolute;
+    left: 500px;
+    top: 200px;
+    height: 100%;
+    width: auto;
+    max-width: 74%;
+    min-width: 74%;
+
+    padding: 15px 35px 35px 35px;
+}
+
+.clip {
+    margin: 20px 0px 30px 0px;
+    background-color: #757e8b;
+    width: auto;
+}
+
+.clip table {
+    width: 100%;
+}
+
+.clip td:nth-child(1) {
+    width: 300px;
+}
+
+.clip td:nth-child(2) {
+    min-height: 100%;
+}
+
+.clip iframe {
+    height: 100%;
+    width: auto;
+    display: inline-block;
+    border-style: none;
+}
+
+.clip #playImage {
+    width: 300px;
+    height: 150px;
+}
+
+.clip #content {
+    top: 0px;
+    padding: 5px 20px 0px 20px;
+    display: inline-block;
+    min-height: 100%;
+    width: 100%;
+}
+
+.clip #header {
+    min-width: 100%;
+    margin: auto;
+
+    padding-bottom: 10px;
+
+    border-bottom: 2px solid #343434;
+}
+
+.clip #title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.clip #year {
+    float: right;
+
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.clip #location {
+    font-size: 22px;
+}
+
+.clip #body {
+    width: 100%;
+    padding-top: 10px;
+}
+
+.clip #familyMembers {
+    font-size: 20px;
+}
+
+.clip #footer {
+    width: 100%;
+    padding-top: 10px;
+}
+
+.clip #footer-background {
+    margin-top: -41px;
+    
+    background-color: #AAB4C0;
+    bottom: 0px;
+    display: block;
+    
+    width: 100%;
+    height: 35px;
+}
+
+.clip #tags {
+    font-size: 20px;
+    
+    color: white;
+}
+
+.clip #entertainmentRating {
+    float: right;
+
+    margin-top: -4px;
+    
+    font-weight: bold;
+    font-size: 20px;
+
+    color: white;
+}
+
