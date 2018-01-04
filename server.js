@@ -53,7 +53,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/clips', (req, res) => {
-    Clip.find({}).then((clips) => {
+    Clip.find({}).then((mongoClips) => {
+        var clips = createClipsObject(mongoClips);
         res.send({clips});
     });
 });
@@ -70,7 +71,8 @@ app.get('/clips/:queries', (req, res) => {
         tags: clipJSON.tags != undefined ? { $all : clipJSON.tags } : undefined,
         entertainmentRating: clipJSON.entertainmentRatings != undefined ? { $in : clipJSON.entertainmentRatings } : undefined,
     });
-    Clip.find(JSON.parse(query)).then((clips) => {
+    Clip.find(JSON.parse(query)).then((mongoClips) => {
+        var clips = createClipsObject(mongoClips);
         res.send({clips});
     });
 });
