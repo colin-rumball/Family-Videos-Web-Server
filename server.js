@@ -3,10 +3,11 @@ var cors = require('cors');
 const hbs = require('hbs');
 var bodyParser = require('body-parser');
 const axios = require('axios');
+var {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
-var {ObjectID} = require('mongodb');
+var {authenticate} = require('./middleware/authenticate');
 
 const SERVER_PORT = process.env.PORT || 3000;
 
@@ -122,6 +123,10 @@ app.post('/clips', (req, res) => {
     }, (e) => {
         res.status(400).send(e);
     });
+});
+
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
 });
 
 app.listen(SERVER_PORT, () => {
