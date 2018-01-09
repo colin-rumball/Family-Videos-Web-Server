@@ -125,6 +125,10 @@ app.post('/clips', (req, res) => {
     });
 });
 
+app.post('/users', (req, res) => {
+    
+});
+
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);
 });
