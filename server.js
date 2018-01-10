@@ -1,3 +1,5 @@
+require('./config/config');
+
 var express = require('express');
 var cors = require('cors');
 const hbs = require('hbs');
@@ -9,7 +11,7 @@ var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
 var {authenticate} = require('./middleware/authenticate');
 
-const SERVER_PORT = process.env.PORT || 3000;
+const SERVER_PORT = process.env.PORT;
 
 var familyNamesKey = {
     'Kenneth Rumball': 'Papa',
@@ -50,6 +52,8 @@ app.get('/', (req, res) => {
     Clip.find({}).then((mongoClips) => {
         var clips = createClipsObject(mongoClips);
         res.render('page.hbs', {clips});
+    }, (e) => {
+        res.status(400).send(e);
     });
 });
 
@@ -125,6 +129,25 @@ app.post('/clips', (req, res) => {
     });
 });
 
+app.delete('/clips/:id', (req, res) => {
+    var id = req.params.id;
+
+    if (!ObjectID.isValid(id))
+    {
+        return res.status(404).send();
+    }
+
+    Clip.findByIdAndRemove(id).then((clip) => {
+        if (!clip) {
+            return res.status(404).send();
+        }
+
+        res.send({clip});
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
+
 app.post('/users', (req, res) => {
     
 });
@@ -163,3 +186,7 @@ var createClipsObject = function(clips) {
 
     return clips;
 };
+
+module.exports = {
+    app
+}
