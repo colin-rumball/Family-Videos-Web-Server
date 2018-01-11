@@ -9,6 +9,7 @@ var {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
+var {User} = require('./models/User');
 var {authenticate} = require('./middleware/authenticate');
 
 const SERVER_PORT = process.env.PORT;
@@ -68,6 +69,7 @@ app.get('/clips/:queries', (req, res) => {
     var queries = req.params.queries;
     var clipJSON = JSON.parse(decodeURIComponent(queries));
     
+    // Stringify to remove undefined values
     var query = JSON.stringify({
         title: clipJSON.titleQuery != undefined ? {$regex : clipJSON.titleQuery, $options: 'i' } : undefined,
         familyMembers: clipJSON.familyMembers != undefined ? { $all : clipJSON.familyMembers } : undefined,
@@ -149,11 +151,35 @@ app.delete('/clips/:id', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-    
+    var body = _pick(req.body, ['email', 'password']);
+    var user = new User(body);
+
+    // TODO: check that creation code is right
+
+    user.save().then(() => {
+        return user.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(user.toJSON());
+    }).catch((err) => {
+        res.status(400).send(err);
+    });
 });
 
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);
+});
+
+app.post('/users/login', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password']);
+
+    User.findByCredentials(body.email, body.password).then((user) => {
+        return user.generateAuthToken().then((token) => {
+            res.header('x-auth', token).send(user);
+        })
+        res.send(user);
+    }).catch((e) => {
+        res.status(400).send();
+    });
 });
 
 app.listen(SERVER_PORT, () => {
