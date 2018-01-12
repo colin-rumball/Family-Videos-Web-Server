@@ -31,6 +31,8 @@ var UserSchema = new mongoose.Schema({
             required: true
         }
     }]
+}, {
+    usePushEach: true
 });
 
 UserSchema.methods.toJSON = function() {
@@ -54,6 +56,16 @@ UserSchema.methods.generateAuthToken = function () {
     });
 };
 
+UserSchema.methods.removeToken = function (token) {
+    var user = this;
+
+    return user.update({
+        $pull: {
+            tokens: {token}
+        }
+    })
+};
+
 UserSchema.statics.findByToken = function(token) {
     var User = this;
     var decoded;
@@ -65,23 +77,25 @@ UserSchema.statics.findByToken = function(token) {
     }
 
     return User.findOne({
-        _id: decoded._id,
+        '_id': decoded._id,
         'tokens.token': token,
-        'tokens.acces': 'auth'
+        'tokens.access': 'auth'
     });
 };
 
 UserSchema.statics.findByCredentials = function(email, password) {
     var User = this;
+    var foundUser;
 
     return User.findOne({email}).then((user) => {
         if (!user) {
             return Promise.reject();
         }
+        foundUser = user;
         return bcrypt.compare(password, user.password);
     }).then((res) => {
         if (res) {
-            return user;
+            return foundUser;
         }
         return Promise.reject();
     }).catch((e) => {
