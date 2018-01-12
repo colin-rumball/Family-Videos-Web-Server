@@ -107,21 +107,13 @@ app.patch('/clips', (req, res) => {
     });
 });
 
-app.post('/clips', (req, res) => {
+app.post('/clips', authenticate, (req, res) => {
+    var body = _.pick(req.body, [
+        'tapeId', 'clipId', 'title', 'year', 'location', 'filmedBy',
+        'familyMembers', 'entertainmentRating', 'youtubeId', 'tags', 'fileName',
+    ]);
     
-    var clip = new Clip({
-        tapeId: req.body.tapeId,
-        clipId: req.body.clipId,
-        title: req.body.title,
-        year: req.body.year,
-        location: req.body.location,
-        filmedBy: req.body.filmedBy,
-        familyMembers: req.body.familyMembers,
-        entertainmentRating: req.body.entertainmentRating,
-        youtubeId: req.body.youtubeId,
-        tags: req.body.tags,
-        fileName: req.body.fileName
-    });
+    var clip = new Clip(body);
 
     clip.save().then((doc) => {
         var newId = doc._id;
