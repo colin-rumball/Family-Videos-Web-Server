@@ -124,7 +124,7 @@ app.post('/clips', authenticate, (req, res) => {
     });
 });
 
-app.delete('/clips/:id', (req, res) => {
+app.delete('/clips/:id', authenticate, (req, res) => {
     var id = req.params.id;
 
     if (!ObjectID.isValid(id))
@@ -143,20 +143,20 @@ app.delete('/clips/:id', (req, res) => {
     });
 });
 
-app.post('/users', (req, res) => {
-    var body = _.pick(req.body, ['email', 'password']);
-    var user = new User(body);
+// app.post('/users', (req, res) => {
+//     var body = _.pick(req.body, ['email', 'password']);
+//     var user = new User(body);
 
-    // TODO: check that creation code is right
+//     // TODO: check that creation code is right
 
-    user.save().then(() => {
-        return user.generateAuthToken();
-    }).then((token) => {
-        res.header('x-auth', token).send(user);
-    }).catch((err) => {
-        res.status(400).send(err);
-    });
-});
+//     user.save().then(() => {
+//         return user.generateAuthToken();
+//     }).then((token) => {
+//         res.header('x-auth', token).send(user);
+//     }).catch((err) => {
+//         res.status(400).send(err);
+//     });
+// });
 
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);

@@ -7,6 +7,6 @@
     "development": {
         "PORT": 3000,
         "MONGODB_URI": "mongodb://localhost:27017/RumballHomeVideosApp",
-        "JWT_SECRET": "7nWj2Xe!NtZQkYeP"
+        "JWT_SECRET": "e$YRsx893sacen"
     }
 }
