@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{{> head }}
+	<link rel="stylesheet" type="text/css" href="/public/css/pages/video.css">
+	<script src="/public/js/pages/video.js"></script>
+	<title>Video | Family Videos</title>
+</head>
+
+<body>
+	{{> nav this}}
+	<div class="container">
+		<div class="video-iframe-container" id="video-iframe-container">
+			<iframe align="middle" src="https://www.youtube.com/embed/{{clip.youtubeId}}?rel=0&amp;showinfo=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		</div>
+		<div class="video-info" id="video-info">
+			<div class="row">
+				<span class="col-lg-10">
+					<h2 id="video-title">
+						<strong>{{clip.title}}</strong>
+					</h2>
+				</span>
+				<span class="col-lg-2">
+					<p id="video-year">{{clip.year}}</p>
+				</span>
+			</div>
+			<div class="row">
+				<span class="col-lg-12">
+					<p id="video-location">{{clip.location}}</p>
+				</span>
+			</div>
+			<div class="row">
+				<span class="col-lg-12">
+					<p id="video-family-members">{{clip.familyMembers}}</p>
+				</span>
+			</div>
+			<div class="row video-info-footer">
+				<span class="col-lg-10">
+					<p id="video-tags">{{clip.tags}}</p>
+				</span>
+				<span class="col-lg-2">
+					<p id="video-rating">
+						<i class="fa fa-star"></i> {{clip.entertainmentRating}}</p>
+				</span>
+			</div>
+			{{# if isAuth}}
+				<input type="button" value="Edit Info" class="btn btn-primary edit-video-info-button" id="edit-video-info-button"> 
+			{{/if}}
+		</div>
+		{{# if isAuth}}
+		<div class="video-info-edit hidden-info" id="video-info-edit">
+			<div class="row">
+				<h4 class="col-sm-12">Title</h4>
+				<div class="col-sm-12">
+					<input id="edited-title" class="video-info-edit-title" type="text" name="title" value="{{clip.title}}">
+				</div>
+			</div>
+			<div class="row">
+				<h4 class="col-sm-12">Year ({{clip.year}})</h4>
+				<div class="col-sm-12">
+					<label class="radiobutton">1991
+						<input class="edited-years" type="radio" name="years" value="1991">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">1992
+						<input class="edited-years" type="radio" name="years" value="1992">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">1993
+						<input class="edited-years" type="radio" name="years" value="1993">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">1994
+						<input class="edited-years" type="radio" name="years" value="1994">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">1995
+						<input class="edited-years" type="radio" name="years" value="1995">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">1996
+						<input class="edited-years" type="radio" name="years" value="1996">
+						<span class="radiobutton-inner"></span>
+					</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<h4 class="col-sm-12">Location ({{clip.location}})</h4>
+				<div class="col-sm-12">
+					<label class="radiobutton">Horseshoe Valley
+						<input class="edited-locations" type="radio" name="locations" value="Horseshoe Valley">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">Papa &amp; Grandma's
+						<input class="edited-locations" type="radio" name="locations" value="Papa and Grandma's House">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">Rumball House
+						<input class="edited-locations" type="radio" name="locations" value="Rumball House">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">Lean House
+						<input class="edited-locations" type="radio" name="locations" value="Lean House">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">Cobourg
+						<input class="edited-locations" type="radio" name="locations" value="Cobourg">
+						<span class="radiobutton-inner"></span>
+					</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<h4 class="col-sm-12">Family Members ({{clip.familyMembers}})</h4>
+				<div class="col-sm-12">
+					<label class="checkbox">Papa
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Kenneth Rumball">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Grandma
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Catherine Rumball">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">John
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="John Rumball">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Valerie
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Valerie Rumball">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Colin
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Colin Rumball">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Kelsey
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Kelsey Rumball">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Rick
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Rick Lean">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Lauralyn
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Lauralyn Lean">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Alicia
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Alicia Lean">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Olivia
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Olivia Lean">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Dave
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="David Rumball">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Kim
+						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Kimberley Rumball">
+						<span class="checkbox-inner"></span>
+					</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<h4 class="col-sm-12">Entertainment Rating ({{clip.entertainmentRating}})</h4>
+				<div class="col-sm-12">
+					<label class="radiobutton">1
+						<input class="edited-entertainmentRatings" type="radio" name="entertainmentRatings" value="1">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">2
+						<input class="edited-entertainmentRatings" type="radio" name="entertainmentRatings" value="2">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">3
+						<input class="edited-entertainmentRatings" type="radio" name="entertainmentRatings" value="3">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">4
+						<input class="edited-entertainmentRatings" type="radio" name="entertainmentRatings" value="4">
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">5
+						<input class="edited-entertainmentRatings" type="radio" name="entertainmentRatings" value="5">
+						<span class="radiobutton-inner"></span>
+					</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<h4 class="col-sm-12">Tags ({{clip.tags}})</h4>
+				<div class="col-sm-12">
+					<label class="checkbox">Cute
+						<input class="edited-tags" type="checkbox" name="tags" value="Cute">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Funny
+						<input class="edited-tags" type="checkbox" name="tags" value="Funny">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Heartwarming
+						<input class="edited-tags" type="checkbox" name="tags" value="Heart Warming">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Holidays
+						<input class="edited-tags" type="checkbox" name="tags" value="Holidays">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Birthdays
+						<input class="edited-tags" type="checkbox" name="tags" value="Birthdays">
+						<span class="checkbox-inner"></span>
+					</label>
+					<label class="checkbox">Sports
+						<input class="edited-tags" type="checkbox" name="tags" value="Sports and Activities">
+						<span class="checkbox-inner"></span>
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<h4 class="col-sm-12">YouTube ID</h4>
+				<div class="col-sm-12">
+					<input type="text" name="youtubeId" id="edited-youtubeId" value="{{clip.youtubeId}}" readonly>
+				</div>
+			</div>
+			<br>
+			{{!-- <div class="row">
+				<h2 class="col-sm-12">Advanced</h2>
+				<div class="col-sm-3">
+					<h4>Tape Id ({{clip.tapeId}})</h4>
+					<input id="tapeId" type="text" name="tapeId">
+				</div>
+				<div class="col-sm-3">
+					<h4>Clip Id ({{clip.clipId}})</h4>
+					<input id="clipId" type="text" name="clipId">
+				</div>
+			</div> --}}
+			<div class="row">
+				<div class="edit-info-buttons-container">
+					<input type="button" class="btn btn-secondary edit-info-button" id="cancel-info-button" value="Cancel">
+					<input type="button" class="btn btn-primary edit-info-button" id="save-info-button" value="Save">
+				</div>
+			</div>
+		</div>
+		{{/if}}
+	</div>
+</body>
+</html>

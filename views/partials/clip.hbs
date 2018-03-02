@@ -1,28 +1,27 @@
-<div class="clip">
-    <table>
-    <tr>
-        <td>
-        <img src="/../public/images/playbutton.png" id="playImage" alt="https://www.youtube.com/embed/{{youtubeId}}">
-        </td>
-        <td>
-        <div id="content">
-            <div id="header">
-                <span id="title">{{title}}</span>
-                <span id="year">{{year}}</span>
-                <div id="location">{{location}}</div>
-            </div>
+<div class="col-lg-4 col-md-6 col-sm-12 col-clip">
+	<div class="clip" id="{{youtubeId}}">
+		<img class="clip-image" src="http://img.youtube.com/vi/{{youtubeId}}/0.jpg" alt="">
+		</iframe>
+		<div class="clip-info">
+			<div id="title">{{title}}</div>
+			
+			<span id="location">{{location}}</span>
+			<span id="year">{{year}}</span>
+		</div>
+		{{!-- <div id="content">
+			<div id="header">
+				
+			</div>
 
-            <div id="body">
-                <div id="familyMembers">{{familyMembers}}</div>
-            </div>
+			<div id="body">
+				<div id="familyMembers">{{familyMembers}}</div>
+			</div>
 
-            <div id="footer">
-                <span id="tags">{{tags}}</span>
-                <span id="entertainmentRating">&#9733;{{entertainmentRating}}</span>
-            </div>
-        </div>
-        </td>
-    </tr>
-    </table>
-    <div id="footer-background"></div>
+			<div id="footer">
+				
+				<span id="entertainmentRating">&#9733;{{entertainmentRating}}</span>
+			</div>
+		</div>
+		<div id="footer-background"></div> --}}
+	</div>
 </div>

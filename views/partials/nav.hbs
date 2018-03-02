@@ -1,0 +1,15 @@
+<!-- nav bar -->
+<nav class="navbar family-videos-nav">
+	<!-- Brand -->
+	<div class="container family-videos-nav-container">
+		<a class="navbar-brand" href="/">Family Videos</a>
+		
+		{{# if isAuth}}
+		<a href="/upload">UPLOAD</i></a>
+		{{else}}
+		<a href="/sign-in">SIGN IN
+			<i class="fa fa-user"></i>
+		</a>
+		{{/if}}
+	</div>
+</nav>

@@ -1,0 +1,103 @@
+.query-form {
+	width: 100%;
+}
+
+.query-search-box-container {
+	width: 100%;
+	height: 100%;
+}
+
+.query-search-box {
+	width: 80%;
+	height: 45px;
+	line-height: 40px;
+	padding: 0 7px;
+	float: left;
+}
+
+.query-search-button {
+	width: 45px;
+	height: 45px;
+	cursor: pointer;
+}
+
+.query-options {
+	float: right;
+	line-height: 40px;
+}
+
+.query-options span {
+	display: inline-block;
+	font-size: 17px;
+	padding: 0 10px;
+	height: 100%;
+}
+
+.query-options span:not(:last-child) {
+	border-right: 1px solid #CDCCCA;
+}
+
+.collapsed-queries {
+	margin-top: 1%;
+}
+
+.query {
+}
+
+.query h4 {
+	border-bottom: 1px solid #CDCCCA;
+	padding: 5px 0;
+}
+
+.query-clear-button-container {
+	height: 45px;
+}
+
+.query-clear-button {
+	height: 45px;
+	float: right;
+}
+
+/* CLIPS */
+
+.clips-container {
+	padding-top: 2%;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.clip {
+	width: 100%;
+	margin: 3% 0;
+}
+
+.clip:hover {
+	cursor: pointer;
+}
+
+.clip:hover .clip-info {
+	background-color: rgb(249, 248, 244);
+	border: 1px solid rgb(182, 181, 181);
+	cursor: pointer;
+}
+
+.clip-info {
+	position: absolute;
+	left: 3%;
+	padding: 7px;
+	top: 60%;
+	width: 94%;
+	height: 37%;
+	background-color: rgb(248, 245, 235);
+	border: 1px solid rgb(205, 204, 202);
+}
+
+.clip-image {
+	width: 100%;
+	height: auto;
+}
+
+.col-clip {
+	padding-left: 1%;
+	padding-right: 1%;
+}

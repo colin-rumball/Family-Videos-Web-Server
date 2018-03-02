@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{{> head }}
+	{{!-- <link rel="stylesheet" type="text/css" href="/public/css/pages/home.css"> --}}
+	<script src="/public/js/pages/upload.js"></script>
+	<title>Upload | Family Videos</title>
+</head>
+
+<body>
+	{{> nav}}
+	<div class="container">
+		<div class="row">
+			<ul>
+				{{#each files}}
+				<li class="clip-file" id="{{this}}">{{this}}</li>
+				{{/each}}
+			</ul>
+		</div>
+		<input type="button" class="btn btn-primary" id="upload-button" value="Upload All">
+	</div>
+</body>
+
+</html>

@@ -30,12 +30,10 @@ var Clip = mongoose.model('Clip', {
     },
     filmedBy: {
         type: String,
-        required: true,
         trim: true
     },
     familyMembers: {
         type: Array,
-        required: true,
         trim: true
     },
     entertainmentRating: {
@@ -48,7 +46,11 @@ var Clip = mongoose.model('Clip', {
     },
     tags: {
         type: Array
-    }
+	},
+	state: {
+		type: String,
+		required: true
+	}
 });
 
 module.exports = {

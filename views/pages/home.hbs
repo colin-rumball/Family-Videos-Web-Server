@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{{> head }}
+	<link rel="stylesheet" type="text/css" href="/public/css/pages/home.css">
+	<script src="/public/js/pages/home.js"></script>
+	<title>Home | Family Videos</title>
+</head>
+<body>
+	{{> nav this}}
+	<div class="container">
+		{{!-- QUERIES --}}
+		<form method="GET" action="/clips" id="query-form" class="query-form">
+			<div class="row">
+				<div class="col-lg-5 col-md-4 col-sm-12 query-search-box-container">
+					<input type="text" name="title" id="SearchQuery" class="query-search-box" placeholder="Search...">
+					<button type="submit" class="query-search-button" id="query-search-button">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+
+				<div class="col-lg-7 col-md-8 col-sm-12">
+					<div class="query-options">
+						<span>213 Videos</span>
+						<span>
+							<button>
+								<i class="fa fa-th"></i>
+							</button>
+							<button>
+								<i class="fa fa-th-list"></i>
+							</button>
+						</span>
+						<span>
+							<a href="#collapsed-queries" data-toggle="collapse">Sort
+							<i class="fa fa-sliders"></i></a>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<div id="collapsed-queries" class="collapse collapsed-queries">
+				{{> queries}}
+			</div>
+		</form>
+
+		{{!-- CLIPS --}}
+		<div class="row clips-container" id="clips-container">
+			{{#each clips}}
+				{{> clip }}
+			{{/each}}
+		</div>
+	</div>
+
+	
+</body>
+</html>

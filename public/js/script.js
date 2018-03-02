@@ -1,3 +1,5 @@
+
+
 $(document).ready(function()
 {  
     images = document.querySelectorAll('#playImage');
