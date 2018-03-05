@@ -1,0 +1,16 @@
+form {
+	text-align: center;
+}
+
+input {
+	display: block;
+	margin: 5px auto;
+	padding: 0 3px;
+	width: 26%;
+	line-height: 30px;
+}
+
+.btn-primary {
+	margin: 10px auto;
+	padding: 8px 35px;
+}
