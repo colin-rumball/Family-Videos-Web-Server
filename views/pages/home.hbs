@@ -21,16 +21,16 @@
 
 				<div class="col-lg-7 col-md-8 col-sm-12">
 					<div class="query-options">
-						<span>213 Videos</span>
+						<span>{{numResults}} Videos</span>
 						<span>
-							<button>
+							<button class="btn btn-info {{#ifCond listStyle 'grid'}}active{{/ifCond}}" id="grid-view-button">
 								<i class="fa fa-th"></i>
 							</button>
-							<button>
+							<button class="btn btn-info {{#ifCond listStyle 'list'}}active{{/ifCond}}" id="list-view-button">
 								<i class="fa fa-th-list"></i>
 							</button>
 						</span>
-						<span>
+						<span class="sort-button">
 							<a href="#collapsed-queries" data-toggle="collapse">Sort
 							<i class="fa fa-sliders"></i></a>
 						</span>
@@ -39,18 +39,30 @@
 			</div>
 			
 			<div id="collapsed-queries" class="collapse collapsed-queries">
-				{{> queries}}
+				{{> queries this}}
 			</div>
 		</form>
 
 		{{!-- CLIPS --}}
 		<div class="row clips-container" id="clips-container">
-			{{#each clips}}
-				{{> clip }}
+			{{#ifCond numResults 0}}
+			<div class="no-results-message"><p>Sorry, no results were found</p></div>
+			{{/ifCond}}
+			{{#each clips}} 
+				{{> clip }} 
 			{{/each}}
 		</div>
+		<div class="page-buttons">
+			<span class="btn btn-info {{#ifCond currentPage 1}}disabled{{/ifCond}}" id="page-left-button" data-page="{{currentPage}}">
+				<i class="fa fa-arrow-left"></i>
+			</span>
+			<span>
+				Page {{currentPage}} of {{maxPages}}
+			</span>
+			<span class="btn btn-info {{#ifCond currentPage maxPages}}disabled{{/ifCond}}" id="page-right-button" data-page="{{currentPage}}">
+				<i class="fa fa-arrow-right"></i>
+			</span>
+		</div>
 	</div>
-
-	
 </body>
 </html>

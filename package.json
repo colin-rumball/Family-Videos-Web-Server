@@ -17,6 +17,7 @@
     "express-session": "^1.15.6",
     "fs-extra": "^5.0.0",
     "hbs": "^4.0.1",
+    "http-signature": "^1.2.0",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
     "mongodb": "^3.0.1",

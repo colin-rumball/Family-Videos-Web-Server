@@ -1,27 +1,27 @@
-<div class="col-lg-4 col-md-6 col-sm-12 col-clip">
+<div class="col-lg-4 col-md-6 col-sm-12 grid-style-clip {{#ifCond listStyle 'list'}}hidden{{/ifCond}}">
 	<div class="clip" id="{{youtubeId}}">
 		<img class="clip-image" src="http://img.youtube.com/vi/{{youtubeId}}/0.jpg" alt="">
-		</iframe>
 		<div class="clip-info">
 			<div id="title">{{title}}</div>
-			
 			<span id="location">{{location}}</span>
 			<span id="year">{{year}}</span>
 		</div>
-		{{!-- <div id="content">
-			<div id="header">
-				
-			</div>
+	</div>
+</div>
 
-			<div id="body">
-				<div id="familyMembers">{{familyMembers}}</div>
-			</div>
-
-			<div id="footer">
-				
-				<span id="entertainmentRating">&#9733;{{entertainmentRating}}</span>
+<div class="col-sm-12 list-style-clip {{#ifCond listStyle 'grid'}}hidden{{/ifCond}}">
+	<div class="clip" id="{{youtubeId}}">
+		<img class="clip-image" src="http://img.youtube.com/vi/{{youtubeId}}/0.jpg" alt="">
+		<div class="clip-info">
+			<div id="title">{{title}}</div>
+			<span id="location">{{location}}</span>
+			<span id="year">{{year}}</span>
+			<div id="family-members">{{familyMembers}}</div>
+			<div class="clip-footer">
+				<span id="tags">{{tags}}</span>
+				<span id="rating">{{entertainmentRating}}</span>
 			</div>
 		</div>
-		<div id="footer-background"></div> --}}
+		
 	</div>
 </div>

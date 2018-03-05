@@ -2,211 +2,38 @@
 	<div class="col-lg-2 col-md-6 col-sm-12">
 		<div class="query">
 			<h4>When</h4>
-			<label class="radiobutton">Any Year
-				<input class="years" type="radio" name="years" value="any" checked>
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">1991
-				<input class="years" type="radio" name="years" value="1991">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">1992
-				<input class="years" type="radio" name="years" value="1992">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">1993
-				<input class="years" type="radio" name="years" value="1993">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">1994
-				<input class="years" type="radio" name="years" value="1994">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">1995
-				<input class="years" type="radio" name="years" value="1995">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">1996
-				<input class="years" type="radio" name="years" value="1996">
-				<span class="radiobutton-inner"></span>
-			</label>
+			 {{#each years}} {{> queryYear }} {{/each}}
 		</div>
 	</div>
 	 <div class="col-lg-4 col-md-6 col-sm-12">
 		<div class="query">
 			<h4>Who</h4>
 			<div class="row">
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Papa
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Kenneth Rumball">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Grandma
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Catherine Rumball">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">John
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="John Rumball">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Valerie
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Valerie Rumball">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Colin
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Colin Rumball">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Kelsey
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Kelsey Rumball">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Rick
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Rick Lean">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Lauralyn
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Lauralyn Lean">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Alicia
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Alicia Lean">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Olivia
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Olivia Lean">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Dave
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="David Rumball">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-6 col-md-4 col-sm-6">
-					<label class="checkbox">Kim
-						<input class="familyMembers" type="checkbox" name="familyMembers" value="Kimberley Rumball">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
+				{{#each familyMembers}} {{> queryFamilyMember }} {{/each}}
 			</div>
 		</div>
 	</div>
 	<div class="col-lg-2 col-md-6 col-sm-12">
 		<div class="query">
 			<h4>What</h4>
-			<label class="checkbox">Cute
-				<input class="tags" type="checkbox" name="tags" value="Cute">
-				<span class="checkbox-inner"></span>
-			</label>
-			<label class="checkbox">Funny
-				<input class="tags" type="checkbox" name="tags" value="Funny">
-				<span class="checkbox-inner"></span>
-			</label>
-			<label class="checkbox">Heartwarming
-				<input class="tags" type="checkbox" name="tags" value="Heart Warming">
-				<span class="checkbox-inner"></span>
-			</label>
-			<label class="checkbox">Holidays
-				<input class="tags" type="checkbox" name="tags" value="Holidays">
-				<span class="checkbox-inner"></span>
-			</label>
-			<label class="checkbox">Birthdays
-				<input class="tags" type="checkbox" name="tags" value="Birthdays">
-				<span class="checkbox-inner"></span>
-			</label>
-			<label class="checkbox">Sports
-				<input class="tags" type="checkbox" name="tags" value="Sports and Activities">
-				<span class="checkbox-inner"></span>
-			</label>
+			{{#each tags}} {{> queryTag }} {{/each}}
 		</div>
 	</div>
 	<div class="col-lg-2 col-md-6 col-sm-12">
 		<div class="query">
 			<h4>Where</h4>
-			<label class="radiobutton">Any Place
-				<input class="locations" type="radio" name="locations" value="any" checked>
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">Horseshoe Valley
-				<input class="locations" type="radio" name="locations" value="Horseshoe Valley">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">Papa &amp; Grandma's
-				<input class="locations" type="radio" name="locations" value="Papa and Grandma's House">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">Rumball House
-				<input class="locations" type="radio" name="locations" value="Rumball House">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">Lean House
-				<input class="locations" type="radio" name="locations" value="Lean House">
-				<span class="radiobutton-inner"></span>
-			</label>
-			<label class="radiobutton">Cobourg
-				<input class="locations" type="radio" name="locations" value="Cobourg">
-				<span class="radiobutton-inner"></span>
-			</label>
+			{{#each locations}} {{> queryLocation }} {{/each}}
 		</div>
 	</div>
 	<div class="col-lg-2 col-md-12 col-sm-12">
 		<div class="query">
 			<h4>&#9733;Rating</h4>
 			<div class="row">
-				<div class="col-lg-12">
-					<label class="checkbox">1 (Worst)
-						<input class="entertainmentRatings" type="checkbox" name="entertainmentRatings" value="1">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-12">
-					<label class="checkbox">2
-						<input class="entertainmentRatings" type="checkbox" name="entertainmentRatings" value="2">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-12">
-					<label class="checkbox">3
-						<input class="entertainmentRatings" type="checkbox" name="entertainmentRatings" value="3">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-12">
-					<label class="checkbox">4
-						<input class="entertainmentRatings" type="checkbox" name="entertainmentRatings" value="4">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
-				<div class="col-lg-12">
-					<label class="checkbox">5 (Best)
-						<input class="entertainmentRatings" type="checkbox" name="entertainmentRatings" value="5">
-						<span class="checkbox-inner"></span>
-					</label>
-				</div>
+				{{#each ratings}} {{> queryRating }} {{/each}}
 			</div>
 		</div>
 	</div>
 </div>
-<div class="query-clear-button-container">
+{{!-- <div class="query-clear-button-container">
 	<input type="button" class="query-clear-button" id="query-clear-button" value="Clear Selection">
-</div>
+</div> --}}
