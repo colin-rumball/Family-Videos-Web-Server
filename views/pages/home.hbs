@@ -8,9 +8,9 @@
 </head>
 <body>
 	{{> nav this}}
-	<div class="container">
+	<div class="container main-content">
 		{{!-- QUERIES --}}
-		<form method="GET" action="/clips" id="query-form" class="query-form">
+		<form method="GET" action="/" id="query-form" class="query-form">
 			<div class="row">
 				<div class="col-lg-5 col-md-4 col-sm-12 query-search-box-container">
 					<input type="text" name="title" id="SearchQuery" class="query-search-box" placeholder="Search...">
@@ -64,5 +64,6 @@
 			</span>
 		</div>
 	</div>
+	{{> footer this}}
 </body>
 </html>

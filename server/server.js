@@ -24,30 +24,6 @@ const pathToClips = path.join(__dirname, '..', 'clips');
 
 const MAX_PER_PAGE = 9;
 
-var familyNamesKey = {
-    'Kenneth Rumball': 'Papa',
-    'Catherine Rumball': 'Grandma',
-    'John Rumball': 'John',
-    'Valerie Rumball': 'Valerie',
-    'Colin Rumball': 'Colin',
-    'Kelsey Rumball': 'Kelsey',
-    'Rick Lean': 'Rick',
-    'Lauralyn Lean': 'Lauralyn',
-    'Alicia Lean': 'Alicia',
-    'Olivia Lean': 'Olivia',
-    'David Rumball': 'Dave',
-    'Kimberley Rumball': 'Kim'
-};
-
-var tagsKey = {
-    'Cute': 'Cute',
-    'Funny': 'Funny',
-    'Heart Warming': 'Heartwarming',
-    'Holidays': 'Holidays',
-    'Birthdays': 'Birthdays',
-    'Sports and Activities': 'Sports'
-};
-
 var app = express();
 // if this isn't working then it's likely a naming issue
 hbs.registerPartials(__dirname + '/../views/partials');
@@ -84,46 +60,46 @@ app.get('/', (req, res) => {
 	var queries = req.query;
 	var mongoQuery = {};
 
+	var test = parseInt(queries.year);
+
 	if (!_.isEmpty(queries)) {
 		// Stringify to remove undefined values
 		mongoQuery = JSON.stringify({
 			title: queries.title != undefined ? { $regex: queries.title, $options: 'i' } : undefined,
-			familyMembers: queries.familyMembers != undefined ? { $all: queries.familyMembers } : undefined,
-			year: typeof queries.year === 'number' ? queries.year : undefined,
-			location: queries.location,
+			members: queries.familyMembers != undefined ? { $all: queries.familyMembers } : undefined,
+			year: queries.year === 'Any Year' ? undefined : parseInt(queries.year),
+			location: queries.location === 'Any Place' ? undefined : queries.location,
 			tags: queries.tags != undefined ? { $all: queries.tags } : undefined,
-			entertainmentRating: queries.entertainmentRatings != undefined ? { $in: queries.entertainmentRatings } : undefined,
+			rating: queries.ratings != undefined ? { $in: queries.ratings } : undefined,
 		});
 	}
 
 	Clip.find(_.isEmpty(mongoQuery) ? {} : JSON.parse(mongoQuery)).then((mongoClips) => {
 		var obj = createHomeParameters(queries, mongoClips);
-		obj.isAuth = req.isAuthenticated();
-		res.render('pages/home', obj);
+		renderTemplateToResponse(req, res, 'pages/home', obj);
 	}, (e) => {
 		res.status(400).send(e);
 	});
 
 	// If we got to here something went wrong (most likely with the database)
-	res.render('pages/home', { numResults: 0});
+	// renderTemplateToResponse(req, res, 'pages/home', { numResults: 0 });
 });
 
 app.get('/video/:id', (req, res) => {
 	var youtubeId = req.params.id;
-	var isAuth = req.isAuthenticated();
 	Clip.findOne({ youtubeId: youtubeId}).then((clip) => {
-		res.render('pages/video', {clip, isAuth});
+		renderTemplateToResponse(req, res, 'pages/video', { clip })
 	}).catch((e) => {
 		res.redirect('/');
 	});
 });
 
 app.get('/sign-in', (req, res) => {
-	res.render('pages/sign-in', { isAuth: req.isAuthenticated() });
+	renderTemplateToResponse(req, res, 'pages/sign-in', {});
 });
 
 app.get('/register', isLoggedIn, (req, res) => {
-	res.render('pages/register', { isAuth: req.isAuthenticated() });
+	renderTemplateToResponse(req, res, 'pages/register', {});
 });
 
 app.get('/upload', isLoggedIn, (req, res) => {
@@ -133,7 +109,7 @@ app.get('/upload', isLoggedIn, (req, res) => {
 			let stats = fse.statSync(filePath);
 			return !stats.isDirectory();
 		});
-		res.render('pages/upload', { files: justFiles, isAuth: req.isAuthenticated() });
+		renderTemplateToResponse(req, res, 'pages/upload', { files: justFiles });
 	});
 });
 
@@ -143,7 +119,7 @@ app.post('/register', isLoggedIn, (req, res) => {
 	User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
 		if (err) {
 			console.error(err);
-			return res.render('pages/register', {isAuth: req.isAuthenticated()});
+			return renderTemplateToResponse(req, res, 'pages/register', {});
 		}
 
 		passport.authenticate('local')(req, res, () => {
@@ -168,17 +144,17 @@ app.post('/upload', isLoggedIn, (req, res) => {
 				let tapeId = parseInt(files[i].substr(files[i].indexOf('Tape') + 5, 1)),
 					clipId = parseInt(files[i].substr(files[i].indexOf('Sub') + 4, 2));
 				var clipBody = {
-					tapeId: tapeId,
-					clipId: clipId,
+					tape_id: tapeId,
+					clip_id: clipId,
 					title: files[i],
 					year: 9999,
 					location: 'unset',
 					filmedBy: 'unset',
-					familyMembers: [],
-					entertainmentRating: 0,
-					youtubeId: undefined,
+					members: [],
+					rating: 0,
+					youtube_id: undefined,
 					tags: [],
-					fileName: files[i],
+					file_name: files[i],
 					state: 'uploading'
 				};
 
@@ -191,7 +167,7 @@ app.post('/upload', isLoggedIn, (req, res) => {
 						url: 'http://localhost:5000/uploads',
 						json: {
 							filename: files[i],
-							callbackUrl: 'http://localhost:3000/clips/' + newId.toString()
+							callbackUrl: 'http://localhost:3000/video/' + newId.toString()
 						}
 					});
 				}, (e) => {
@@ -220,6 +196,25 @@ app.patch('/clips/:Id', (req, res) => {
 	}
 
 	Clip.findByIdAndUpdate(id, { $set: { youtubeId: youtubeId, state: 'unlisted' } }).then((clip) => {
+		if (!clip) {
+			return res.sendStatus(404);
+		}
+		fse.move(path.join(pathToClips, clip.fileName), path.join(pathToClips, 'uploaded', clip.fileName));
+		res.sendStatus(200);
+	}).catch((e) => {
+		res.sendStatus(400);
+	});
+});
+
+app.patch('/video/:Id', (req, res) => {
+	var id = req.params.Id;
+	var body = req.body;
+
+	if (!ObjectID.isValid(id)) {
+		return res.sendStatus(404); // TODO
+	}
+
+	Clip.findByIdAndUpdate(id, body).then((clip) => {
 		if (!clip) {
 			return res.sendStatus(404);
 		}
@@ -266,8 +261,13 @@ app.patch('/clips/:Id', (req, res) => {
 // });
 
 app.listen(SERVER_PORT, () => {
-	console.log('Started Main Server on port', SERVER_PORT);
+	console.log('Started Family Video Server on port:', SERVER_PORT);
 });
+
+function renderTemplateToResponse(req, res, page, obj) {
+	obj.isAuth = req.isAuthenticated();
+	res.render(page, obj);
+}
 
 var clipSort_year = function(a, b) {
     return a.year - b.year;
@@ -286,7 +286,7 @@ function createHomeParameters(queries, mongoClips) {
 		{ year: '1995', selected: queries.year === '1995' },
 		{ year: '1996', selected: queries.year === '1996' }
 	];
-	obj.familyMembers = [
+	obj.members = [
 		{ name: 'Papa', selected: queries.familyMembers === undefined ? false : queries.familyMembers.includes('Papa') },
 		{ name: 'Grandma', selected: queries.familyMembers === undefined ? false : queries.familyMembers.includes('Grandma') },
 		{ name: 'John', selected: queries.familyMembers === undefined ? false : queries.familyMembers.includes('John') },
@@ -343,17 +343,17 @@ var createClipsObject = function(clips, pageNumber, listStyle) {
     clips.sort(clipSort_year);
 
     clips.forEach(function(clip) {
-		if (clip.familyMembers) {
-       		for (var i = 0; i < clip.familyMembers.length; i++)
+		if (clip.members) {
+			for (var i = 0; i < clip.members.length; i++)
 			{
-				clip.familyMembers[i] = ' ' + familyNamesKey[clip.familyMembers[i]];
+				clip.members[i] = ' ' + clip.members[i];
 			}
 		}
 
 		if (clip.tags) {
 			for (var j = 0; j < clip.tags.length; j++)
 			{
-				clip.tags[j] = ' ' + tagsKey[clip.tags[j]];
+				clip.tags[j] = ' ' + clip.tags[j];
 			}
 		}
 
@@ -371,3 +371,51 @@ function shuffleArray(array) {
 		array[j] = temp;
 	}
 }
+
+// fse.readJSON(__dirname + '/db/old-data.json').then((data) => {
+// 	var newJson = {clips: []};
+
+// 	for (var i = 0; i < data.clips.length; i++) {
+// 		var oldClipData = data.clips[i];
+// 		var newClipData = {};
+// 		newClipData.tape_id = oldClipData.tapeId;
+// 		newClipData.clip_id = oldClipData.clipId;
+// 		newClipData.title = oldClipData.title;
+// 		newClipData.year = oldClipData.year;
+// 		newClipData.location = oldClipData.location;
+// 		newClipData.file_name = oldClipData.fileName;
+// 		newClipData.tags = oldClipData.tags;
+// 		newClipData.youtube_id = oldClipData.youtubeId;
+// 		newClipData.rating = oldClipData.entertainmentRating;
+// 		newClipData.members = oldClipData.familyMembers;
+// 		newClipData.state = 'listed';
+
+// 		// location
+// 		if(newClipData.location === "Papa and Grandma's House") {
+// 			newClipData.location = "Papa and Grandma's";
+// 		}
+
+// 		// tags
+// 		if (newClipData.tags.includes("Heart Warming")) {
+// 			newClipData.tags[newClipData.tags.indexOf("Heart Warming")] = "Heartwarming";
+// 		}
+
+// 		if (newClipData.tags.includes("Sports and Activities")) {
+// 			newClipData.tags[newClipData.tags.indexOf("Sports and Activities")] = "Sports";
+// 		}
+
+// 		// members
+// 		for (var j = 0; j < newClipData.members.length; j++) {
+// 			newClipData.members[j] = familyNamesKey[newClipData.members[j]];
+// 		}
+
+// 		newJson.clips.push(newClipData);
+
+// 		var newClip = new Clip(newClipData);
+// 		newClip.save();
+// 	}
+
+// 	// fse.writeJSON(__dirname + '/db/new-data.json', newJson).then((newData) => {
+// 	// 	console.dir(newData);
+// 	// });
+// });

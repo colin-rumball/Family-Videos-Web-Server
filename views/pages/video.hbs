@@ -12,7 +12,7 @@
 	{{> nav this}}
 	<div class="container">
 		<div class="video-iframe-container" id="video-iframe-container">
-			<iframe align="middle" src="https://www.youtube.com/embed/{{clip.youtubeId}}?rel=0&amp;showinfo=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+			<iframe align="middle" src="https://www.youtube.com/embed/{{clip.youtube_id}}?rel=0&amp;showinfo=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 		</div>
 		<div class="video-info" id="video-info">
 			<div class="row">
@@ -32,7 +32,7 @@
 			</div>
 			<div class="row">
 				<span class="col-lg-12">
-					<p id="video-family-members">{{clip.familyMembers}}</p>
+					<p id="video-family-members">{{clip.members}}</p>
 				</span>
 			</div>
 			<div class="row video-info-footer">
@@ -41,7 +41,7 @@
 				</span>
 				<span class="col-lg-2">
 					<p id="video-rating">
-						<i class="fa fa-star"></i> {{clip.entertainmentRating}}</p>
+						<i class="fa fa-star"></i> {{clip.rating}}</p>
 				</span>
 			</div>
 			{{# if isAuth}}
@@ -113,7 +113,7 @@
 			</div>
 
 			<div class="row">
-				<h4 class="col-sm-12">Family Members ({{clip.familyMembers}})</h4>
+				<h4 class="col-sm-12">Family Members ({{clip.members}})</h4>
 				<div class="col-sm-12">
 					<label class="checkbox">Papa
 						<input class="edited-familyMembers" type="checkbox" name="familyMembers" value="Kenneth Rumball">
@@ -167,7 +167,7 @@
 			</div>
 
 			<div class="row">
-				<h4 class="col-sm-12">Entertainment Rating ({{clip.entertainmentRating}})</h4>
+				<h4 class="col-sm-12">Entertainment Rating ({{clip.rating}})</h4>
 				<div class="col-sm-12">
 					<label class="radiobutton">1
 						<input class="edited-entertainmentRatings" type="radio" name="entertainmentRatings" value="1">
@@ -224,7 +224,7 @@
 			<div class="row">
 				<h4 class="col-sm-12">YouTube ID</h4>
 				<div class="col-sm-12">
-					<input type="text" name="youtubeId" id="edited-youtubeId" value="{{clip.youtubeId}}" readonly>
+					<input type="text" name="youtubeId" id="edited-youtubeId" value="{{clip.youtube_id}}" readonly>
 				</div>
 			</div>
 			<br>

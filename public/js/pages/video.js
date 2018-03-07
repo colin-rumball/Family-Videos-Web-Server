@@ -68,7 +68,7 @@ $(function () {
 
 		$.ajax({
 			type: "PATCH",
-			url: "http://localhost:3000/clips",
+			url: "http://localhost:3000/video/" + id,
 			data: JSON.stringify(clipData),
 			contentType: "application/json",
 		});

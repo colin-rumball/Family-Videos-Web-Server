@@ -10,8 +10,12 @@ body {
 	sans-serif;
 }
 
+.main-content {
+	min-height: calc(91.6vh - 110px);
+}
+
 .family-videos-nav {
-	background-color: rgb(248, 245, 234);
+	background-color: #f8f5ea;
 	height: 60px;
 	line-height: 50px;
 	margin-bottom: 3%;
@@ -25,6 +29,24 @@ body {
 
 .family-videos-nav-container {
 	/* border-bottom: 1px dotted #CDCCCA; */
+}
+
+/* FOOTER */
+
+.footer {
+	height: 50px;
+	text-align: center;
+	background-color: #f8f5ea;
+	line-height: 50px;
+	font-size: 16px;
+	border-top: 1px dotted #CDCCCA;
+}
+
+.footer .version-number {
+	float: right;
+	border-bottom: 2px dashed #74797E;
+	line-height: 20px;
+	margin-top: 15px;
 }
 
 /* RADIO BUTTONS */

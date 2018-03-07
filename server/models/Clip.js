@@ -1,15 +1,15 @@
 var mongoose = require('mongoose');
 
 var Clip = mongoose.model('Clip', {
-    tapeId: {
+    tape_id: {
         type: Number,
         required: true
     },
-    clipId: {
+    clip_id: {
         type: Number,
         required: true
     },
-    fileName: {
+    file_name: {
         type: String,
         required: true,
         trim: true
@@ -28,19 +28,15 @@ var Clip = mongoose.model('Clip', {
         required: true,
         trim: true
     },
-    filmedBy: {
-        type: String,
-        trim: true
-    },
-    familyMembers: {
+    members: {
         type: Array,
         trim: true
     },
-    entertainmentRating: {
+    rating: {
         type: Number,
         default: null
     },
-    youtubeId: {
+    youtube_id: {
         type: String,
         default: null
     },
