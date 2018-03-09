@@ -5,6 +5,10 @@ $(function() {
 		});
 	});
 
+	$('#query-submit-button').click(function() {
+		submitQuery(1);
+	});
+
 	$('#grid-view-button').click(function(e) {
 		e.preventDefault();
 		$('.grid-style-clip').each(function (clip) {

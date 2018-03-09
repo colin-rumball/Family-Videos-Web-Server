@@ -58,13 +58,16 @@
 	padding: 5px 0;
 }
 
-.query-clear-button-container {
+.query-submit-button-container {
+	margin: 1% auto;
 	height: 45px;
+	text-align: center;
 }
 
-.query-clear-button {
+.query-submit-button {
 	height: 45px;
-	float: right;
+	padding: 7px 35px;
+	margin: auto;
 }
 
 .no-results-message {
@@ -85,15 +88,6 @@
 	padding-right: 1%;
 }
 
-.list-style-clip {
-
-}
-
-.grid-style-clip .clip {
-	width: 100%;
-	margin: 3% 0;
-}
-
 .clip:hover {
 	cursor: pointer;
 }
@@ -102,6 +96,13 @@
 	background-color: rgb(249, 248, 244);
 	border: 1px solid rgb(182, 181, 181);
 	cursor: pointer;
+}
+
+/* GRID STYLE */
+
+.grid-style-clip .clip {
+	width: 100%;
+	margin: 3% 0;
 }
 
 .grid-style-clip .clip-info {
@@ -120,30 +121,88 @@
 	height: auto;
 }
 
+.grid-style-clip #location {
+	position: absolute;
+	bottom: 8px;
+}
+
+.grid-style-clip #year {
+	position: absolute;
+	right: 8px;
+	bottom: 8px;
+}
+
+/* LIST STYLE */
+
+.list-style-clip {
+
+}
+
 .list-style-clip .clip {
 	width: 100%;
 	height: 190px;
 	margin: 1% 0;
 }
 
-.list-style-clip .clip-info {
-	padding: 7px 0px 7px 0px;
-	width: 100%;
-	height: 100%;
-	background-color: rgb(248, 245, 235);
-	border: 1px solid rgb(205, 204, 202);
-}
-
 .list-style-clip .clip-image {
 	float: left;
 	height: 100%;
 	width: auto;
+	padding-right: 10px;
+}
+
+.list-style-clip .clip-info {
+	padding: 7px 0;
+	width: 100%;
+	height: calc(100% - 44px);
+	background-color: rgb(248, 245, 235);
+	border: 1px solid rgb(205, 204, 202);
 }
 
 .list-style-clip .clip-footer {
 	width: 100%;
 	line-height: 44px;
 	background-color: #ddd7c5;
+}
+
+.list-style-clip:hover .clip-footer {
+	background-color: rgb(216, 210, 192);
+}
+
+.list-style-clip #title {
+	font-size: 20px;
+	width: 92%;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.list-style-clip #year {
+	position: absolute;
+	font-size: 18px;
+	right: 26px;
+	top: 20px;
+}
+
+.list-style-clip #location {
+	font-size: 17px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid rgb(205, 204, 202);
+}
+
+.list-style-clip #family-members {
+	font-size: 18px;
+	padding-top: 20px;
+}
+
+.list-style-clip #tags {
+	font-size: 17px;
+}
+
+.list-style-clip #rating {
+	font-size: 18px;
+	position: absolute;
+	right: 28px;
+	bottom: 10px;
 }
 
 /* PAGING */
