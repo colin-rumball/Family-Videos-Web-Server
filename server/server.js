@@ -77,13 +77,13 @@ app.get('/', (req, res) => {
 
 	Clip.find(_.isEmpty(mongoQuery) ? {state: 'listed'} : JSON.parse(mongoQuery)).then((mongoClips) => {
 		var obj = createHomeParameters(queries, mongoClips);
-		renderTemplateToResponse(req, res, 'pages/home', obj);
+		return renderTemplateToResponse(req, res, 'pages/home', obj);
 	}, (e) => {
-		res.status(400).send(e);
+		return res.status(400).send(e);
 	});
 
 	// If we got to here something went wrong (most likely with the database)
-	// renderTemplateToResponse(req, res, 'pages/home', { numResults: 0 });
+	renderTemplateToResponse(req, res, 'pages/home', { numResults: 0 });
 });
 
 app.get('/video/:id', (req, res) => {
@@ -135,9 +135,9 @@ app.post('/register', isLoggedIn, (req, res) => {
 
 app.post('/sign-in', passport.authenticate('local', {
 	successReturnToOrRedirect: '/',
-	failureRedirect: '/register'
+	failureRedirect: '/sign-in'
 }), (req, res) => {
-
+	
 });
 
 app.post('/upload', isLoggedIn, (req, res) => {
