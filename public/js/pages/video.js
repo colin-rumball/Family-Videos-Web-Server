@@ -56,6 +56,8 @@ $(function () {
 
 		var youtubeId = $('#edited-youtubeId').val();
 
+		var mongo_id = $('#edited-mongoId').val();
+
 		var clipData = {
 			title: title,
 			year: year,
@@ -63,12 +65,13 @@ $(function () {
 			familyMembers: famMembers,
 			entertainmentRating: entertainmentRating,
 			tags: tags,
-			youtubeId: youtubeId
+			youtube_id: youtubeId,
+			state: 'listed'
 		};
 
 		$.ajax({
 			type: "PATCH",
-			url: "http://localhost:3000/video/" + id,
+			url: "http://localhost:3000/video/" + mongo_id,
 			data: JSON.stringify(clipData),
 			contentType: "application/json",
 		});

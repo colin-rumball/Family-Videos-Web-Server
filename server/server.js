@@ -71,10 +71,11 @@ app.get('/', (req, res) => {
 			location: queries.location === 'Any Place' ? undefined : queries.location,
 			tags: queries.tags != undefined ? { $all: queries.tags } : undefined,
 			rating: queries.ratings != undefined ? { $in: queries.ratings } : undefined,
+			state: 'listed'
 		});
 	}
 
-	Clip.find(_.isEmpty(mongoQuery) ? {} : JSON.parse(mongoQuery)).then((mongoClips) => {
+	Clip.find(_.isEmpty(mongoQuery) ? {state: 'listed'} : JSON.parse(mongoQuery)).then((mongoClips) => {
 		var obj = createHomeParameters(queries, mongoClips);
 		renderTemplateToResponse(req, res, 'pages/home', obj);
 	}, (e) => {
@@ -218,7 +219,11 @@ app.patch('/video/:Id', (req, res) => {
 		if (!clip) {
 			return res.sendStatus(404);
 		}
-		fse.move(path.join(pathToClips, clip.fileName), path.join(pathToClips, 'uploaded', clip.fileName));
+
+		if (clip.state === 'uploading')
+		{
+			fse.move(path.join(pathToClips, clip.fileName), path.join(pathToClips, 'uploaded', clip.fileName));
+		}
 		res.sendStatus(200);
 	}).catch((e) => {
 		res.sendStatus(400);
