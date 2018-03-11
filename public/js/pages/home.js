@@ -65,6 +65,10 @@ function gotoPage(newPage) {
 
 function submitQuery(pageNumber) {
 	var queryString = $('#query-form').serialize();
+	var $showUnlisted = $('#show-unlisted');
+	if ($showUnlisted != undefined && $showUnlisted.prop('checked')) {
+		queryString += '&state=unlisted';
+	}
 	queryString += `&page=${pageNumber}`;
 	queryString += '&listStyle=' + ($('#grid-view-button').hasClass('active') ? 'grid' : 'list');
 	window.location.href = '/?' + queryString;

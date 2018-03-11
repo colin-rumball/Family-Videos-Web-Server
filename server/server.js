@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
 			location: queries.location === 'Any Place' ? undefined : queries.location,
 			tags: queries.tags != undefined ? { $all: queries.tags } : undefined,
 			rating: queries.ratings != undefined ? { $in: queries.ratings } : undefined,
-			state: 'listed'
+			state: req.isAuthenticated() ? queries.state != undefined ? 'unlisted' : 'listed' : 'listed'
 		});
 	}
 
