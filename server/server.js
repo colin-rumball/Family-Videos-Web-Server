@@ -87,8 +87,12 @@ app.get('/', (req, res) => {
 });
 
 app.get('/video/:id', (req, res) => {
-	var youtubeId = req.params.id;
-	Clip.findOne({ youtubeId: youtubeId}).then((clip) => {
+	var mongo_id = req.params.id;
+	if (!ObjectID.isValid(mongo_id)) {
+		return res.sendStatus(404);
+	}
+	
+	Clip.findById(mongo_id).then((clip) => {
 		renderTemplateToResponse(req, res, 'pages/video', { clip })
 	}).catch((e) => {
 		res.redirect('/');
@@ -211,6 +215,11 @@ app.patch('/video/:Id', (req, res) => {
 	var id = req.params.Id;
 	var body = req.body;
 
+	body.members = body.members.length > 0 ? body.members : undefined;
+	body.tags = body.tags.length > 0 ? body.tags : undefined;
+
+	body = JSON.parse(JSON.stringify(body));
+
 	if (!ObjectID.isValid(id)) {
 		return res.sendStatus(404); // TODO
 	}
@@ -224,7 +233,7 @@ app.patch('/video/:Id', (req, res) => {
 		{
 			fse.move(path.join(pathToClips, clip.fileName), path.join(pathToClips, 'uploaded', clip.fileName));
 		}
-		res.sendStatus(200);
+		res.redirect('/video/'+clip._id);
 	}).catch((e) => {
 		res.sendStatus(400);
 	});

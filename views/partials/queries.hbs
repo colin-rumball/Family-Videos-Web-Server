@@ -33,13 +33,14 @@
 			</div>
 		</div>
 	</div>
+	 {{#if isAuth}}
+	<label class="col-sm-12 checkbox" style="margin:15px;">Only Show Unlisted
+		<input class="show-unlisted" id="show-unlisted" type="checkbox" name="show-unlisted" value="Only Show Unlisted">
+		<span class="checkbox-inner"></span>
+	</label>
+	{{/if}}
 </div>
-{{#if isAuth}}
-<label class="checkbox">
-	<input class="show-unlisted" id="show-unlisted" type="checkbox" name="show-unlisted" value="Only Show Unlisted">
-	<span class="checkbox-inner"></span>
-</label>
-{{/if}}
+
 <div class="query-submit-button-container">
-	<input type="button" class=" btn btn-primary query-submit-button" id="query-submit-button" value="Search">
+	<input type="button" class=" btn btn-info query-submit-button" id="query-submit-button" value="Search">
 </div>

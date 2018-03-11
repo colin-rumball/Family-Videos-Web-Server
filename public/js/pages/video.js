@@ -62,8 +62,8 @@ $(function () {
 			title: title,
 			year: year,
 			location: location,
-			familyMembers: famMembers,
-			entertainmentRating: entertainmentRating,
+			members: famMembers,
+			rating: entertainmentRating,
 			tags: tags,
 			youtube_id: youtubeId,
 			state: 'listed'

@@ -45,7 +45,7 @@
 				</span>
 			</div>
 			{{# if isAuth}}
-				<input type="button" value="Edit Info" class="btn btn-primary edit-video-info-button" id="edit-video-info-button"> 
+				<input type="button" value="Edit Info" class="btn btn-info edit-video-info-button" id="edit-video-info-button"> 
 			{{/if}}
 		</div>
 		{{# if isAuth}}
@@ -224,11 +224,11 @@
 			<div class="row">
 				<h4 class="col-sm-12">YouTube ID</h4>
 				<div class="col-sm-12">
-					<input type="text" name="youtubeId" id="edited-youtubeId" value="{{clip.youtube_id}}" readonly>
+					<input type="text" name="youtubeId" id="edited-youtubeId" value="{{clip.youtube_id}}" disabled>
 				</div>
 				<h4 class="col-sm-12">Mongo ID</h4>
 				<div class="col-sm-12">
-					<input type="text" name="mongo_id" id="edited-mongoId" value="{{clip._id}}" readonly>
+					<input type="text" name="mongo_id" id="edited-mongoId" value="{{clip._id}}" disabled>
 				</div>
 			</div>
 			<br>
@@ -246,11 +246,12 @@
 			<div class="row">
 				<div class="edit-info-buttons-container">
 					<input type="button" class="btn btn-secondary edit-info-button" id="cancel-info-button" value="Cancel">
-					<input type="button" class="btn btn-primary edit-info-button" id="save-info-button" value="Save">
+					<input type="button" class="btn btn-info edit-info-button" id="save-info-button" value="Save">
 				</div>
 			</div>
 		</div>
 		{{/if}}
 	</div>
+	 {{> footer this}}
 </body>
 </html>
