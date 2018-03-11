@@ -332,7 +332,8 @@ function createHomeParameters(queries, mongoClips) {
 	obj.maxPages = Math.max(Math.ceil(mongoClips.length / MAX_PER_PAGE), 1);
 	obj.clips = createClipsObject(mongoClips, obj.currentPage, obj.listStyle);
 	if (_.isEmpty(queries)) {
-		shuffleArray(obj.clips) // randomize if looking for root route
+		shuffleArray(obj.clips); // randomize if looking for root route
+		obj.isRandom = true;
 	}
 	return obj;
 }

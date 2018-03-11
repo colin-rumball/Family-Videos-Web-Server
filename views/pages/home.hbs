@@ -21,7 +21,7 @@
 
 				<div class="col-lg-7 col-md-8 col-sm-12">
 					<div class="query-options">
-						<span>{{numResults}} Videos</span>
+						<span>{{#unless isRandom}}{{numResults}} Videos{{/unless}}</span>
 						<span>
 							<button class="btn btn-info {{#ifCond listStyle 'grid'}}active{{/ifCond}}" id="grid-view-button">
 								<i class="fa fa-th"></i>
@@ -52,6 +52,8 @@
 				{{> clip }} 
 			{{/each}}
 		</div>
+		{{!-- PAGING --}}
+		{{#unless isRandom}}
 		<div class="page-buttons">
 			<span class="btn btn-info {{#ifCond currentPage 1}}disabled{{/ifCond}}" id="page-left-button" data-page="{{currentPage}}">
 				<i class="fa fa-arrow-left"></i>
@@ -63,6 +65,7 @@
 				<i class="fa fa-arrow-right"></i>
 			</span>
 		</div>
+		{{/unless}}
 	</div>
 	{{> footer this}}
 </body>
