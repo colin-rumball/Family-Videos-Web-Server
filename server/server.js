@@ -78,13 +78,14 @@ app.get('/', (req, res) => {
 
 	Clip.find(_.isEmpty(mongoQuery) ? {state: 'listed'} : JSON.parse(mongoQuery)).then((mongoClips) => {
 		var obj = createHomeParameters(queries, mongoClips);
-		return renderTemplateToResponse(req, res, 'pages/home', obj);
+		renderTemplateToResponse(req, res, 'pages/home', obj);
 	}, (e) => {
-		return res.status(400).send(e);
+		renderTemplateToResponse(req, res, 'pages/home', { numResults: 0 });
+		// return res.status(400).send(e);
 	});
 
 	// If we got to here something went wrong (most likely with the database)
-	renderTemplateToResponse(req, res, 'pages/home', { numResults: 0 });
+	
 });
 
 app.get('/video/:id', (req, res) => {
