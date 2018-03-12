@@ -1,4 +1,4 @@
-require('./config/config');
+// require('./config/config');
 
 const express = require('express'),
 	passport = require('passport'),
