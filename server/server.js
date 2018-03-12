@@ -18,6 +18,7 @@ var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
 var {User} = require('./models/User');
 var {isLoggedIn} = require('./middleware/middleware');
+var {ImportData} = require('./db/data-importer');
 
 const SERVER_PORT = process.env.PORT;
 const pathToClips = path.join(__dirname, '..', 'clips');
@@ -115,6 +116,14 @@ app.get('/upload', isLoggedIn, (req, res) => {
 			return !stats.isDirectory();
 		});
 		renderTemplateToResponse(req, res, 'pages/upload', { files: justFiles });
+	});
+});
+
+app.get('/videos.json', isLoggedIn, (req, res) => {
+	Clip.find({}).then((mongoClips) => {
+		res.send({videos: mongoClips});
+	}, (e) => {
+		res.status(400).send(e);
 	});
 });
 
@@ -387,50 +396,4 @@ function shuffleArray(array) {
 	}
 }
 
-// fse.readJSON(__dirname + '/db/old-data.json').then((data) => {
-// 	var newJson = {clips: []};
-
-// 	for (var i = 0; i < data.clips.length; i++) {
-// 		var oldClipData = data.clips[i];
-// 		var newClipData = {};
-// 		newClipData.tape_id = oldClipData.tapeId;
-// 		newClipData.clip_id = oldClipData.clipId;
-// 		newClipData.title = oldClipData.title;
-// 		newClipData.year = oldClipData.year;
-// 		newClipData.location = oldClipData.location;
-// 		newClipData.file_name = oldClipData.fileName;
-// 		newClipData.tags = oldClipData.tags;
-// 		newClipData.youtube_id = oldClipData.youtubeId;
-// 		newClipData.rating = oldClipData.entertainmentRating;
-// 		newClipData.members = oldClipData.familyMembers;
-// 		newClipData.state = 'listed';
-
-// 		// location
-// 		if(newClipData.location === "Papa and Grandma's House") {
-// 			newClipData.location = "Papa and Grandma's";
-// 		}
-
-// 		// tags
-// 		if (newClipData.tags.includes("Heart Warming")) {
-// 			newClipData.tags[newClipData.tags.indexOf("Heart Warming")] = "Heartwarming";
-// 		}
-
-// 		if (newClipData.tags.includes("Sports and Activities")) {
-// 			newClipData.tags[newClipData.tags.indexOf("Sports and Activities")] = "Sports";
-// 		}
-
-// 		// members
-// 		for (var j = 0; j < newClipData.members.length; j++) {
-// 			newClipData.members[j] = familyNamesKey[newClipData.members[j]];
-// 		}
-
-// 		newJson.clips.push(newClipData);
-
-// 		var newClip = new Clip(newClipData);
-// 		newClip.save();
-// 	}
-
-// 	// fse.writeJSON(__dirname + '/db/new-data.json', newJson).then((newData) => {
-// 	// 	console.dir(newData);
-// 	// });
-// });
+ImportData('backup-3-12-18.json');
