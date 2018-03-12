@@ -27,7 +27,6 @@ const MAX_PER_PAGE = 9;
 var app = express();
 // if this isn't working then it's likely a naming issue
 hbs.registerPartials(__dirname + '/../views/partials');
-console.log(__dirname + '/../views/partials');
 
 app.use(require('express-session')({
 	secret: "colin",
