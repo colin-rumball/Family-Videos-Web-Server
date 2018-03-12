@@ -12,13 +12,13 @@ const express = require('express'),
 	favicon = require('serve-favicon'),
 	path = require('path'),
 	https = require('https');
-console.log(1);
+
 var {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
 var {User} = require('./models/User');
 var {isLoggedIn} = require('./middleware/middleware');
-console.log(2);
+
 const SERVER_PORT = process.env.PORT;
 const pathToClips = path.join(__dirname, '..', 'clips');
 
@@ -27,7 +27,8 @@ const MAX_PER_PAGE = 9;
 var app = express();
 // if this isn't working then it's likely a naming issue
 hbs.registerPartials(__dirname + '/../views/partials');
-console.log(3);
+console.log(__dirname + '/../views/partials');
+
 app.use(require('express-session')({
 	secret: "colin",
 	resave: false,
@@ -42,7 +43,7 @@ app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // app.use(cors());
-console.log(4);
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -55,7 +56,7 @@ hbs.registerHelper('ifCond', (v1, v2, options) => {
 });
 
 // ------ GET
-console.log(5);
+
 app.get('/', (req, res) => {
 	var queries = req.query;
 	var mongoQuery = {};
@@ -272,11 +273,11 @@ app.patch('/video/:Id', (req, res) => {
 // https.createServer(options, app).listen(SERVER_PORT, () => {
 // 	console.log('Started Main Server on port', SERVER_PORT);
 // });
-console.log(6);
+
 app.listen(SERVER_PORT, () => {
 	console.log('Started Family Video Server on port:', SERVER_PORT);
 });
-console.log(7);
+
 function renderTemplateToResponse(req, res, page, obj) {
 	obj.isAuth = req.isAuthenticated();
 	res.render(page, obj);
@@ -345,7 +346,7 @@ function createHomeParameters(queries, mongoClips) {
 	}
 	return obj;
 }
-console.log(8);
+
 var createClipsObject = function(clips, pageNumber, listStyle) {
 	let startIndex = (pageNumber - 1) * MAX_PER_PAGE;
 	if (clips.length > startIndex)
