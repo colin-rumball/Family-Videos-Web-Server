@@ -1,4 +1,4 @@
-require('./config/config');
+// require('./config/config');
 
 const express = require('express'),
 	passport = require('passport'),
@@ -60,8 +60,6 @@ hbs.registerHelper('ifCond', (v1, v2, options) => {
 app.get('/', (req, res) => {
 	var queries = req.query;
 	var mongoQuery = {};
-
-	var test = parseInt(queries.year);
 
 	if (!_.isEmpty(queries)) {
 		// Stringify to remove undefined values
