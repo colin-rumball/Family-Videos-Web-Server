@@ -1,4 +1,4 @@
-// require('./config/config');
+require('./config/config');
 
 const express = require('express'),
 	passport = require('passport'),
@@ -21,8 +21,7 @@ var {isLoggedIn} = require('./middleware/middleware');
 var {ImportData} = require('./db/data-importer');
 
 const SERVER_PORT = process.env.PORT;
-const pathToClips = path.join(__dirname, '..', 'clips');
-
+const PATH_TO_CLIPS = path.join(__dirname, '..', 'clips');
 const MAX_PER_PAGE = 9;
 
 var app = express();
@@ -108,9 +107,9 @@ app.get('/register', isLoggedIn, (req, res) => {
 });
 
 app.get('/upload', isLoggedIn, (req, res) => {
-	fse.readdir(pathToClips).then((contents) => {
+	fse.readdir(PATH_TO_CLIPS).then((contents) => {
 		var justFiles = contents.filter((file) => {
-			let filePath = path.join(pathToClips, file);
+			let filePath = path.join(PATH_TO_CLIPS, file);
 			let stats = fse.statSync(filePath);
 			return !stats.isDirectory();
 		});
@@ -149,9 +148,9 @@ app.post('/sign-in', passport.authenticate('local', {
 });
 
 app.post('/upload', isLoggedIn, (req, res) => {
-	fse.readdir(pathToClips).then((files) => {
+	fse.readdir(PATH_TO_CLIPS).then((files) => {
 		for (let i = 0; i < files.length; i++) {
-			var filePath = path.join(pathToClips, files[i]);
+			var filePath = path.join(PATH_TO_CLIPS, files[i]);
 			let stats = fse.statSync(filePath);
 			if (!stats.isDirectory()) {
 				let tapeId = parseInt(files[i].substr(files[i].indexOf('Tape') + 5, 1)),
@@ -217,7 +216,7 @@ app.patch('/clips/:Id', (req, res) => {
 		if (!clip) {
 			return res.sendStatus(404);
 		}
-		fse.move(path.join(pathToClips, clip.fileName), path.join(pathToClips, 'uploaded', clip.fileName));
+		fse.move(path.join(PATH_TO_CLIPS, clip.fileName), path.join(PATH_TO_CLIPS, 'uploaded', clip.fileName));
 		res.sendStatus(200);
 	}).catch((e) => {
 		res.sendStatus(400);
@@ -244,7 +243,7 @@ app.patch('/video/:Id', (req, res) => {
 
 		if (clip.state === 'uploading')
 		{
-			fse.move(path.join(pathToClips, clip.fileName), path.join(pathToClips, 'uploaded', clip.fileName));
+			fse.move(path.join(PATH_TO_CLIPS, clip.fileName), path.join(PATH_TO_CLIPS, 'uploaded', clip.fileName));
 		}
 		res.redirect('/video/'+clip._id);
 	}).catch((e) => {
@@ -253,25 +252,6 @@ app.patch('/video/:Id', (req, res) => {
 });
 
 // =======================================================================
-
-// app.delete('/clips/:id', authenticate, (req, res) => {
-//     var id = req.params.id;
-
-//     if (!ObjectID.isValid(id))
-//     {
-//         return res.status(404).send();
-//     }
-
-//     Clip.findByIdAndRemove(id).then((clip) => {
-//         if (!clip) {
-//             return res.status(404).send();
-//         }
-
-//         res.send({clip});
-//     }).catch((e) => {
-//         res.status(400).send(e);
-//     });
-// });
 
 // var key = fse.readFileSync(__dirname + '/certificates/private.key');
 // var cert = fse.readFileSync(__dirname + '/certificates/certificate.crt');
@@ -288,12 +268,21 @@ app.patch('/video/:Id', (req, res) => {
 // });
 
 app.listen(SERVER_PORT, () => {
-	console.log('Started Family Video Server on port:', SERVER_PORT);
+	console.log(`Started Family Video Server on port: ${SERVER_PORT} with env: ${process.env.node_env}`);
 });
 
 function renderTemplateToResponse(req, res, page, obj) {
 	obj.isAuth = req.isAuthenticated();
-	res.render(page, obj);
+	if (!_.isEmpty(hbs.handlebars.partials)) {
+		res.render(page, obj);
+	} else {
+		var interval_id = setInterval(() => {
+			if (!_.isEmpty(hbs.handlebars.partials)) {
+				clearInterval(interval_id);
+				res.render(page, obj);
+			}
+		}, 1000);
+	}	
 }
 
 var clipSort_year = function(a, b) {
@@ -352,11 +341,12 @@ function createHomeParameters(queries, mongoClips) {
 	];
 	obj.currentPage = _.isEmpty(queries) ? 1 : parseInt(queries.page);
 	obj.maxPages = Math.max(Math.ceil(mongoClips.length / MAX_PER_PAGE), 1);
-	obj.clips = createClipsObject(mongoClips, obj.currentPage, obj.listStyle);
+	// randomize if looking for root route
 	if (_.isEmpty(queries)) {
-		shuffleArray(obj.clips); // randomize if looking for root route
+		shuffleArray(mongoClips); 
 		obj.isRandom = true;
 	}
+	obj.clips = createClipsObject(mongoClips, obj.currentPage, obj.listStyle, );
 	return obj;
 }
 
