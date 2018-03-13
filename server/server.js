@@ -191,11 +191,6 @@ app.post('/upload', isLoggedIn, (req, res) => {
 	});
 });
 
-app.post('/import-data', (req, res) => {
-	ImportData('backup-3-12-18.json');
-	res.sendStatus(200);
-});
-
 // ------ PATCH
 
 app.patch('/clips', (req, res) => {
