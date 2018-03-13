@@ -18,7 +18,6 @@ var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
 var {User} = require('./models/User');
 var {isLoggedIn} = require('./middleware/middleware');
-var {ImportData} = require('./db/data-importer');
 
 const SERVER_PORT = process.env.PORT;
 const PATH_TO_CLIPS = path.join(__dirname, '..', 'clips');
@@ -26,7 +25,9 @@ const MAX_PER_PAGE = 9;
 
 var app = express();
 // if this isn't working then it's likely a naming issue
-hbs.registerPartials(__dirname + '/../views/partials');
+hbs.registerPartials(__dirname + '/../views/partials', () => {
+	console.log('Partials registered!');
+});
 
 app.use(require('express-session')({
 	secret: "colin",
@@ -61,7 +62,7 @@ app.get('/', (req, res) => {
 	var mongoQuery = {};
 
 	if (!_.isEmpty(queries)) {
-		// Stringify to remove undefined values
+		// Stringify to remove undefined values TODO: can _ do this?
 		mongoQuery = JSON.stringify({
 			title: queries.title != undefined ? { $regex: queries.title, $options: 'i' } : undefined,
 			members: queries.familyMembers != undefined ? { $all: queries.familyMembers } : undefined,
@@ -77,12 +78,12 @@ app.get('/', (req, res) => {
 		var obj = createHomeParameters(queries, mongoClips);
 		renderTemplateToResponse(req, res, 'pages/home', obj);
 	}, (e) => {
-		renderTemplateToResponse(req, res, 'pages/home', { numResults: 0 });
+		renderTemplateToResponse(req, res, 'pages/home', { numResults: 0 }); // TODO
 		// return res.status(400).send(e);
 	});
 
 	// If we got to here something went wrong (most likely with the database)
-	
+	// TODO
 });
 
 app.get('/video/:id', (req, res) => {
@@ -95,6 +96,14 @@ app.get('/video/:id', (req, res) => {
 		renderTemplateToResponse(req, res, 'pages/video', { clip })
 	}).catch((e) => {
 		res.redirect('/');
+	});
+});
+
+app.get('/videos.json', isLoggedIn, (req, res) => {
+	Clip.find({}).then((mongoClips) => {
+		res.send({ videos: mongoClips });
+	}, (e) => {
+		res.status(400).send(e);
 	});
 });
 
@@ -114,14 +123,6 @@ app.get('/upload', isLoggedIn, (req, res) => {
 			return !stats.isDirectory();
 		});
 		renderTemplateToResponse(req, res, 'pages/upload', { files: justFiles });
-	});
-});
-
-app.get('/videos.json', isLoggedIn, (req, res) => {
-	Clip.find({}).then((mongoClips) => {
-		res.send({videos: mongoClips});
-	}, (e) => {
-		res.status(400).send(e);
 	});
 });
 
@@ -179,7 +180,7 @@ app.post('/upload', isLoggedIn, (req, res) => {
 						url: 'http://localhost:5000/uploads',
 						json: {
 							filename: files[i],
-							callbackUrl: 'http://localhost:3000/video/' + newId.toString()
+							callbackUrl: 'http://homevideos.colinrumball.com/video/' + newId.toString()
 						}
 					});
 				}, (e) => {
@@ -247,7 +248,7 @@ app.patch('/video/:Id', (req, res) => {
 });
 
 // =======================================================================
-
+// SSL STUFF
 // var key = fse.readFileSync(__dirname + '/certificates/private.key');
 // var cert = fse.readFileSync(__dirname + '/certificates/certificate.crt');
 // var ca = fse.readFileSync(__dirname + '/certificates/ca_bundle.crt');
@@ -261,6 +262,7 @@ app.patch('/video/:Id', (req, res) => {
 // https.createServer(options, app).listen(SERVER_PORT, () => {
 // 	console.log('Started Main Server on port', SERVER_PORT);
 // });
+// =======================================================================
 
 app.listen(SERVER_PORT, () => {
 	console.log(`Started Family Video Server on port: ${SERVER_PORT} with env: ${process.env.node_env}`);
@@ -271,13 +273,8 @@ function renderTemplateToResponse(req, res, page, obj) {
 	if (!_.isEmpty(hbs.handlebars.partials)) {
 		res.render(page, obj);
 	} else {
-		var interval_id = setInterval(() => {
-			if (!_.isEmpty(hbs.handlebars.partials)) {
-				clearInterval(interval_id);
-				res.render(page, obj);
-			}
-		}, 1000);
-	}	
+		res.send('Sorry!'); // TODO: do something here. Shits fucked.
+	}
 }
 
 var clipSort_year = function(a, b) {

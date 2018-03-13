@@ -1,7 +1,7 @@
 {
     "test": {
         "PORT": 3000,
-        "MONGODB_URI": "mongodb://localhost:27017/RumballHomeVideosAppTest"
+        "MONGODB_URI": "mongodb://192.168.1.9:27017/RumballHomeVideosAppTest"
     },
     "development": {
         "PORT": 3000,
