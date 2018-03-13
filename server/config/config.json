@@ -1,10 +1,12 @@
 {
     "test": {
         "PORT": 3000,
-        "MONGODB_URI": "mongodb://192.168.1.9:27017/RumballHomeVideosAppTest"
+        "MONGODB_URI": "mongodb://192.168.1.9:27017/RumballHomeVideosAppTest",
+        "SESSION_SECRET": "nsiSA)P<ANWZo(KosVa]?3AB|v*h3?"
     },
     "development": {
         "PORT": 3000,
-        "MONGODB_URI": "mongodb://192.168.1.9:27017/RumballHomeVideosApp"
+        "MONGODB_URI": "mongodb://192.168.1.9:27017/RumballHomeVideosApp",
+        "SESSION_SECRET": "nsiSA)P<ANWZo(KosVa]?3AB|v*h3?"
     }
 }

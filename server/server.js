@@ -14,29 +14,30 @@ const express = require('express'),
 	https = require('https');
 
 var {ObjectID} = require('mongodb');
-var {mongoose} = require('./db/mongoose');
+var {mongoose} = require('./db/mongoose'); // TODO: use this to checl db connection status
 var {Clip} = require('./models/Clip');
 var {User} = require('./models/User');
 var {isLoggedIn} = require('./middleware/middleware');
 
 const SERVER_PORT = process.env.PORT;
 const PATH_TO_CLIPS = path.join(__dirname, '..', 'clips');
-const MAX_PER_PAGE = 9;
+const MAX_PER_PAGE = 12;
 
 var app = express();
 // if this isn't working then it's likely a naming issue
 hbs.registerPartials(__dirname + '/../views/partials', () => {
 	console.log('Partials registered!');
+	// Start listening here?
 });
 
 app.use(require('express-session')({
-	secret: "colin",
+	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false
 }));
-app.use('/public', express.static(__dirname + '/../public'));
+app.use('/public', express.static(path.join(__dirname, '..', 'public')));
 app.use(favicon(path.join(__dirname, 'favicon', 'favicon.ico')));
-app.set('views', __dirname + '/../views');
+app.set('views', path.join(__dirname, '..', 'views'));
 app.set('view engine', 'hbs');
 app.use(passport.initialize());
 app.use(passport.session());
@@ -55,6 +56,8 @@ hbs.registerHelper('ifCond', (v1, v2, options) => {
 	return options.inverse(this);
 });
 
+// =======================================================================
+// ------ ROUTES
 // ------ GET
 
 app.get('/', (req, res) => {
@@ -89,13 +92,13 @@ app.get('/', (req, res) => {
 app.get('/video/:id', (req, res) => {
 	var mongo_id = req.params.id;
 	if (!ObjectID.isValid(mongo_id)) {
-		return res.sendStatus(404);
+		return res.sendStatus(404); //TODO: render page of video not found
 	}
 	
 	Clip.findById(mongo_id).then((clip) => {
 		renderTemplateToResponse(req, res, 'pages/video', { clip })
 	}).catch((e) => {
-		res.redirect('/');
+		res.redirect('/'); //TODO: render page of someting wrong
 	});
 });
 
@@ -103,7 +106,7 @@ app.get('/videos.json', isLoggedIn, (req, res) => {
 	Clip.find({}).then((mongoClips) => {
 		res.send({ videos: mongoClips });
 	}, (e) => {
-		res.status(400).send(e);
+		res.status(400).send(e); //TODO: render page of someting wrong
 	});
 });
 
@@ -132,7 +135,7 @@ app.post('/register', isLoggedIn, (req, res) => {
 	User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
 		if (err) {
 			console.error(err);
-			return renderTemplateToResponse(req, res, 'pages/register', {});
+			return renderTemplateToResponse(req, res, 'pages/register', {}); //TODO: render error page
 		}
 
 		passport.authenticate('local')(req, res, () => {
@@ -194,30 +197,30 @@ app.post('/upload', isLoggedIn, (req, res) => {
 
 // ------ PATCH
 
-app.patch('/clips', (req, res) => {
-	Clip.findOneAndUpdate({ youtubeId: req.body.youtubeId }, req.body, (err, clip) => {
+// app.patch('/clips', (req, res) => {
+// 	Clip.findOneAndUpdate({ youtubeId: req.body.youtubeId }, req.body, (err, clip) => {
 
-	});
-});
+// 	});
+// });
 
-app.patch('/clips/:Id', (req, res) => {
-	var id = req.params.Id;
-	var youtubeId = req.body.youtubeId;
+// app.patch('/clips/:Id', (req, res) => {
+// 	var id = req.params.Id;
+// 	var youtubeId = req.body.youtubeId;
 
-	if (!ObjectID.isValid(id)) {
-		return res.sendStatus(404);
-	}
+// 	if (!ObjectID.isValid(id)) {
+// 		return res.sendStatus(404);
+// 	}
 
-	Clip.findByIdAndUpdate(id, { $set: { youtubeId: youtubeId, state: 'unlisted' } }).then((clip) => {
-		if (!clip) {
-			return res.sendStatus(404);
-		}
-		fse.move(path.join(PATH_TO_CLIPS, clip.fileName), path.join(PATH_TO_CLIPS, 'uploaded', clip.fileName));
-		res.sendStatus(200);
-	}).catch((e) => {
-		res.sendStatus(400);
-	});
-});
+// 	Clip.findByIdAndUpdate(id, { $set: { youtubeId: youtubeId, state: 'unlisted' } }).then((clip) => {
+// 		if (!clip) {
+// 			return res.sendStatus(404);
+// 		}
+// 		fse.move(path.join(PATH_TO_CLIPS, clip.fileName), path.join(PATH_TO_CLIPS, 'uploaded', clip.fileName));
+// 		res.sendStatus(200);
+// 	}).catch((e) => {
+// 		res.sendStatus(400);
+// 	});
+// });
 
 app.patch('/video/:Id', (req, res) => {
 	var id = req.params.Id;
@@ -352,7 +355,7 @@ var createClipsObject = function(clips, pageNumber, listStyle) {
 
     clips.sort(clipSort_year);
 
-    clips.forEach(function(clip) {
+    clips.forEach(function(clip) { //TODO
 		if (clip.members) {
 			for (var i = 0; i < clip.members.length; i++)
 			{
