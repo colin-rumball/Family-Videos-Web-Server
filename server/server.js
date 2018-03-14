@@ -96,7 +96,7 @@ app.get('/', (req, res) => {
 app.get('/video/:id', (req, res) => {
 	var mongo_id = req.params.id;
 	if (!ObjectID.isValid(mongo_id)) {
-		renderMessageToResponse(req, res, 'VIDEO_NOT_FOUND', [mongo_id]); // TODO: create message for invalid id?
+		renderMessageToResponse(req, res, 'INVALID_VIDEO_ID', [mongo_id]);
 	}
 	
 	Clip.findById(mongo_id).then((clip) => {
@@ -203,31 +203,6 @@ app.post('/upload', isLoggedIn, (req, res) => {
 });
 
 // ------ PATCH
-
-// app.patch('/clips', (req, res) => {
-// 	Clip.findOneAndUpdate({ youtubeId: req.body.youtubeId }, req.body, (err, clip) => {
-
-// 	});
-// });
-
-// app.patch('/clips/:Id', (req, res) => {
-// 	var id = req.params.Id;
-// 	var youtubeId = req.body.youtubeId;
-
-// 	if (!ObjectID.isValid(id)) {
-// 		return res.sendStatus(404);
-// 	}
-
-// 	Clip.findByIdAndUpdate(id, { $set: { youtubeId: youtubeId, state: 'unlisted' } }).then((clip) => {
-// 		if (!clip) {
-// 			return res.sendStatus(404);
-// 		}
-// 		fse.move(path.join(PATH_TO_CLIPS, clip.fileName), path.join(PATH_TO_CLIPS, 'uploaded', clip.fileName));
-// 		res.sendStatus(200);
-// 	}).catch((e) => {
-// 		res.sendStatus(400);
-// 	});
-// });
 
 app.patch('/video/:Id', (req, res) => {
 	var id = req.params.Id;
@@ -340,30 +315,29 @@ function createHomeParameters(queries, mongoClips) {
 }
 
 var createClipsObject = function(clips, pageNumber, listStyle) {
+	// Start from the first clip of the page they are looking for
 	let startIndex = (pageNumber - 1) * MAX_PER_PAGE;
 	if (clips.length > startIndex)
     {
+		// Determine how many remain to list on the page
 		let max = clips.length > startIndex + MAX_PER_PAGE ? MAX_PER_PAGE : clips.length - startIndex;
+		// Splice the clips down to one page amount
 		clips = clips.slice(startIndex, startIndex + max);
     }
 
+	// Sort the clips. Default is ascending by year.
     clips.sort(clipSort_year);
 
-    clips.forEach(function(clip) { //TODO
+    clips.forEach(function(clip) {
 		if (clip.members) {
-			for (var i = 0; i < clip.members.length; i++)
-			{
-				clip.members[i] = ' ' + clip.members[i];
-			}
+			clip.members = clip.members.join(', ');
 		}
 
 		if (clip.tags) {
-			for (var j = 0; j < clip.tags.length; j++)
-			{
-				clip.tags[j] = ' ' + clip.tags[j];
-			}
+			clip.tags = clip.tags.join(', ');
 		}
 
+		// Eww
 		clip.listStyle = listStyle;
     });
 

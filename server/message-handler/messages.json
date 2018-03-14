@@ -1,4 +1,9 @@
 {
+	"INVALID_VIDEO_ID": {
+		"HTTP_CODE": 400,
+		"TITLE": "400 - Video ID Invalid",
+		"DESCRIPTION": "The supplied video ID ([0]) is not a valid ID."
+	},
 	"PAGE_NOT_FOUND": {
 		"HTTP_CODE": 404,
 		"TITLE": "404 - Page Not Found",
