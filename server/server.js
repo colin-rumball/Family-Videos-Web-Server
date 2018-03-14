@@ -268,7 +268,6 @@ function renderTemplateToResponse(req, res, page, obj) {
 
 function renderMessageToResponse(req, res, messageCode, options) {
 	var messageObject = getMessageObject(messageCode, options);
-	res.status(messageObject.HTTP_CODE);
 	renderTemplateToResponse(req, res, 'pages/error', {
 		error_title: messageObject.TITLE,
 		error_description: messageObject.DESCRIPTION
