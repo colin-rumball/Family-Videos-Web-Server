@@ -1,0 +1,22 @@
+{
+	"PAGE_NOT_FOUND": {
+		"HTTP_CODE": 404,
+		"TITLE": "404 - Page Not Found",
+		"DESCRIPTION": "The page you were looking for could not be found."
+	},
+	"VIDEO_NOT_FOUND": {
+		"HTTP_CODE": 404,
+		"TITLE": "404 - Video Not Found",
+		"DESCRIPTION": "A video could not be found for the following id: [0]."
+	},
+	"UNKNOWN_ERROR": {
+		"HTTP_CODE": 500,
+		"TITLE": "500 - Unknown Error",
+		"DESCRIPTION": "An unknown error has occurred and your request could not be completed."
+	},
+	"NO_DATABASE_RESPONSE": {
+		"HTTP_CODE": 503,
+		"TITLE": "503 - No Database Response",
+		"DESCRIPTION": "There was an issue retrieving information from the server database."
+	}
+}
