@@ -14,10 +14,11 @@ const express = require('express'),
 	https = require('https');
 
 var {ObjectID} = require('mongodb');
-var {mongoose} = require('./db/mongoose'); // TODO: use this to checl db connection status
+var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
 var {User} = require('./models/User');
 var {isLoggedIn} = require('./middleware/middleware');
+var {getMessageObject} = require('./message-handler/message-handler');
 
 const SERVER_PORT = process.env.PORT;
 const PATH_TO_CLIPS = path.join(__dirname, '..', 'clips');
@@ -27,7 +28,9 @@ var app = express();
 // if this isn't working then it's likely a naming issue
 hbs.registerPartials(__dirname + '/../views/partials', () => {
 	console.log('Partials registered!');
-	// Start listening here?
+	app.listen(SERVER_PORT, () => {
+		console.log(`Started Family Video Server on port: ${SERVER_PORT} with env: ${process.env.node_env}`);
+	});
 });
 
 app.use(require('express-session')({
@@ -65,7 +68,7 @@ app.get('/', (req, res) => {
 	var mongoQuery = {};
 
 	if (!_.isEmpty(queries)) {
-		// Stringify to remove undefined values TODO: can _ do this?
+		// Stringify to remove undefined values
 		mongoQuery = JSON.stringify({
 			title: queries.title != undefined ? { $regex: queries.title, $options: 'i' } : undefined,
 			members: queries.familyMembers != undefined ? { $all: queries.familyMembers } : undefined,
@@ -77,28 +80,29 @@ app.get('/', (req, res) => {
 		});
 	}
 
-	Clip.find(_.isEmpty(mongoQuery) ? {state: 'listed'} : JSON.parse(mongoQuery)).then((mongoClips) => {
-		var obj = createHomeParameters(queries, mongoClips);
-		renderTemplateToResponse(req, res, 'pages/home', obj);
-	}, (e) => {
-		renderTemplateToResponse(req, res, 'pages/home', { numResults: 0 }); // TODO
-		// return res.status(400).send(e);
-	});
-
-	// If we got to here something went wrong (most likely with the database)
-	// TODO
+	if (mongoose.connection._readyState === 1) {
+		Clip.find(_.isEmpty(mongoQuery) ? {state: 'listed'} : JSON.parse(mongoQuery)).then((mongoClips) => {
+			var obj = createHomeParameters(queries, mongoClips);
+			return renderTemplateToResponse(req, res, 'pages/home', obj);
+		}).catch((e) => {
+			renderMessageToResponse(req, res, 'NO_DATABASE_RESPONSE');
+		});
+	}
+	else {
+		renderMessageToResponse(req, res, 'NO_DATABASE_RESPONSE');
+	}
 });
 
 app.get('/video/:id', (req, res) => {
 	var mongo_id = req.params.id;
 	if (!ObjectID.isValid(mongo_id)) {
-		return res.sendStatus(404); //TODO: render page of video not found
+		renderMessageToResponse(req, res, 'VIDEO_NOT_FOUND', [mongo_id]); // TODO: create message for invalid id?
 	}
 	
 	Clip.findById(mongo_id).then((clip) => {
 		renderTemplateToResponse(req, res, 'pages/video', { clip })
 	}).catch((e) => {
-		res.redirect('/'); //TODO: render page of someting wrong
+		renderMessageToResponse(req, res, 'VIDEO_NOT_FOUND', [mongo_id]);
 	});
 });
 
@@ -106,7 +110,7 @@ app.get('/videos.json', isLoggedIn, (req, res) => {
 	Clip.find({}).then((mongoClips) => {
 		res.send({ videos: mongoClips });
 	}, (e) => {
-		res.status(400).send(e); //TODO: render page of someting wrong
+		renderMessageToResponse(req, res, 'NO_DATABASE_RESPONSE');
 	});
 });
 
@@ -129,13 +133,16 @@ app.get('/upload', isLoggedIn, (req, res) => {
 	});
 });
 
+app.get('/*', (req, res) => {
+	renderMessageToResponse(req, res, 'PAGE_NOT_FOUND');
+});
+
 // ------ POST
 
 app.post('/register', isLoggedIn, (req, res) => {
 	User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
 		if (err) {
-			console.error(err);
-			return renderTemplateToResponse(req, res, 'pages/register', {}); //TODO: render error page
+			return renderMessageToResponse(req, res, 'UNKNOWN_ERROR');
 		}
 
 		passport.authenticate('local')(req, res, () => {
@@ -232,7 +239,7 @@ app.patch('/video/:Id', (req, res) => {
 	body = JSON.parse(JSON.stringify(body));
 
 	if (!ObjectID.isValid(id)) {
-		return res.sendStatus(404); // TODO
+		return res.sendStatus(404);
 	}
 
 	Clip.findByIdAndUpdate(id, body).then((clip) => {
@@ -250,34 +257,22 @@ app.patch('/video/:Id', (req, res) => {
 	});
 });
 
-// =======================================================================
-// SSL STUFF
-// var key = fse.readFileSync(__dirname + '/certificates/private.key');
-// var cert = fse.readFileSync(__dirname + '/certificates/certificate.crt');
-// var ca = fse.readFileSync(__dirname + '/certificates/ca_bundle.crt');
-
-// var options = {
-// 	key: key,
-// 	cert: cert,
-// 	ca: ca
-// };
-
-// https.createServer(options, app).listen(SERVER_PORT, () => {
-// 	console.log('Started Main Server on port', SERVER_PORT);
-// });
-// =======================================================================
-
-app.listen(SERVER_PORT, () => {
-	console.log(`Started Family Video Server on port: ${SERVER_PORT} with env: ${process.env.node_env}`);
-});
-
 function renderTemplateToResponse(req, res, page, obj) {
 	obj.isAuth = req.isAuthenticated();
 	if (!_.isEmpty(hbs.handlebars.partials)) {
 		res.render(page, obj);
 	} else {
-		res.send('Sorry!'); // TODO: do something here. Shits fucked.
+		res.status(500).send('Something went wrong! Please wait a moment then attempt your request again...');
 	}
+}
+
+function renderMessageToResponse(req, res, messageCode, options) {
+	var messageObject = getMessageObject(messageCode, options);
+	res.status(messageObject.HTTP_CODE);
+	renderTemplateToResponse(req, res, 'pages/error', {
+		error_title: messageObject.TITLE,
+		error_description: messageObject.DESCRIPTION
+	});
 }
 
 var clipSort_year = function(a, b) {
@@ -384,3 +379,20 @@ function shuffleArray(array) {
 		array[j] = temp;
 	}
 }
+
+// =======================================================================
+// SSL STUFF
+// var key = fse.readFileSync(__dirname + '/certificates/private.key');
+// var cert = fse.readFileSync(__dirname + '/certificates/certificate.crt');
+// var ca = fse.readFileSync(__dirname + '/certificates/ca_bundle.crt');
+
+// var options = {
+// 	key: key,
+// 	cert: cert,
+// 	ca: ca
+// };
+
+// https.createServer(options, app).listen(SERVER_PORT, () => {
+// 	console.log('Started Main Server on port', SERVER_PORT);
+// });
+// =======================================================================
