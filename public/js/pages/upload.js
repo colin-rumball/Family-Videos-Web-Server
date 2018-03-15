@@ -4,7 +4,7 @@ $(function() {
 			url: '/upload',
 			type: 'POST',
 			success: function(response) {
-				$('body').append('Success');
+				$('body').append('Success'); // TODO
 			}
 		});
 	});

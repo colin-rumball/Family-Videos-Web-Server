@@ -47,7 +47,7 @@
 }
 
 .collapsed-queries {
-	margin-top: 1%;
+	margin-top: 1vh;
 }
 
 .query {
@@ -59,7 +59,7 @@
 }
 
 .query-submit-button-container {
-	margin: 1% auto;
+	margin: 1vh auto;
 	height: 45px;
 	text-align: center;
 }
@@ -209,7 +209,7 @@
 
 .page-buttons {
 	width: 100%;
-	margin: 2% auto;
+	margin: 2vh auto;
 	text-align: center;	
 	line-height: 24px;
 	font-size: 24px;

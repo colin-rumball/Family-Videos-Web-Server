@@ -6,8 +6,7 @@ html {
 body {
 	height: 100%;
 	background-color: rgb(240, 237, 226);
-	font-family: 'Open Sans',
-	sans-serif;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .main-content {
