@@ -21,7 +21,7 @@ var {isLoggedIn} = require('./middleware/middleware');
 var {getMessageObject} = require('./message-handler/message-handler');
 
 const SERVER_PORT = process.env.PORT;
-const PATH_TO_CLIPS = path.join(__dirname, '..', 'clips');
+const PATH_TO_CLIPS = process.env.PATH_TO_CLIPS;
 const MAX_PER_PAGE = 12;
 
 var app = express();
@@ -53,6 +53,13 @@ passport.deserializeUser(User.deserializeUser());
 
 hbs.registerHelper('ifCond', (v1, v2, options) => {
 	if (v1 === v2) {
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
+
+hbs.registerHelper('ifContains', (v1, v2, options) => {
+	if (v1.includes(v2)) {
 		return options.fn(this);
 	}
 	return options.inverse(this);
@@ -99,6 +106,12 @@ app.get('/video/:id', (req, res) => {
 	}
 	
 	Clip.findById(mongo_id).then((clip) => {
+		if (clip.members) {
+			clip.members = clip.members.join(', ');
+		}
+		if (clip.tags) {
+			clip.tags = clip.tags.join(', ');
+		}
 		renderTemplateToResponse(req, res, 'pages/video', { clip })
 	}).catch((e) => {
 		renderMessageToResponse(req, res, 'VIDEO_NOT_FOUND', [mongo_id]);
@@ -184,13 +197,22 @@ app.post('/upload', isLoggedIn, (req, res) => {
 
 				newClip.save().then((doc) => {
 					var newId = doc._id;
-					request({
-						method: 'POST',
-						url: 'http://localhost:5000/uploads',
-						json: {
-							filename: files[i],
-							callbackUrl: 'http://homevideos.colinrumball.com/video/' + newId.toString()
-						}
+					
+					// Move file to uploading dir
+					fse.move(filePath, path.join(PATH_TO_CLIPS, 'uploading', files[i]))
+					.then(() => {
+						// done moving
+						request({
+							method: 'POST',
+							url: process.env.YOUTUBE_URL + '/uploads',
+							json: {
+								filename: files[i],
+								callbackUrl: process.env.LOCAL_SITE_URL + '/video/' + newId.toString()
+							}
+						});
+					})
+					.catch((e) => {
+
 					});
 				}, (e) => {
 					console.error(e);
@@ -207,9 +229,14 @@ app.patch('/video/:Id', (req, res) => {
 	var id = req.params.Id;
 	var body = req.body;
 
-	body.members = body.members.length > 0 ? body.members : undefined;
-	body.tags = body.tags.length > 0 ? body.tags : undefined;
+	if (body.members) {
+		body.members = body.members.length > 0 ? body.members : undefined;
+	}
+	if (body.tags) {
+		body.tags = body.tags.length > 0 ? body.tags : undefined;
+	}
 
+	// Remove undefined values
 	body = JSON.parse(JSON.stringify(body));
 
 	if (!ObjectID.isValid(id)) {
@@ -223,11 +250,18 @@ app.patch('/video/:Id', (req, res) => {
 
 		if (clip.state === 'uploading')
 		{
-			fse.move(path.join(PATH_TO_CLIPS, clip.fileName), path.join(PATH_TO_CLIPS, 'uploaded', clip.fileName));
+			fse
+			.move(path.join(PATH_TO_CLIPS, 'uploading', clip.file_name), path.join(PATH_TO_CLIPS, 'uploaded', clip.file_name))
+			.then(() => {
+				// success
+			})
+			.catch((e) => {
+
+			});
 		}
-		res.redirect('/video/'+clip._id);
+		res.sendStatus(200);
 	}).catch((e) => {
-		res.sendStatus(400);
+		res.sendStatus(500);
 	});
 });
 
@@ -333,7 +367,7 @@ var createClipsObject = function(clips, pageNumber, listStyle) {
 		}
 
 		if (clip.tags) {
-			clip.tags = clip.tags.join(', ');
+			clip.tags = clip.tags.join(',');
 		}
 
 		// Eww

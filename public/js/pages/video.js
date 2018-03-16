@@ -71,9 +71,15 @@ $(function () {
 
 		$.ajax({
 			type: "PATCH",
-			url: "http://localhost:3000/video/" + mongo_id,
+			url: window.location.href,
 			data: JSON.stringify(clipData),
 			contentType: "application/json",
+			success: function (response) {
+				window.location.href = '/video/' + mongo_id;
+			},
+			error: function(response) {
+				alert('There was an unexpected error. Your request was not completed.');
+			}
 		});
 	});
 });

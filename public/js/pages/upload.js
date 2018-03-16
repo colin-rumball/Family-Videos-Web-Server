@@ -4,7 +4,7 @@ $(function() {
 			url: '/upload',
 			type: 'POST',
 			success: function(response) {
-				$('body').append('Success'); // TODO
+				alert('Upload(s) in progress!')
 			}
 		});
 	});
