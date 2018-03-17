@@ -10,8 +10,6 @@ $(function () {
 	});
 
 	$('#save-info-button').click(function() {
-		// $(this).css('display', 'none');
-
 		var title;
 		var year;
 		var location;

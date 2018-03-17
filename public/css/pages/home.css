@@ -94,7 +94,7 @@
 }
 
 .clip:hover .clip-info {
-	background-color: rgb(249, 248, 244);
+	background-color: var(--main-hover-color);
 	border: 1px solid rgb(182, 181, 181);
 	cursor: pointer;
 }
@@ -155,11 +155,17 @@
 	height: 100%;
 	width: 30%;
 	padding: 0px;
-	background-color: rgb(248, 245, 235);
+	background-color: var(--secondary-bg-color);
+	border: 1px solid rgb(205, 204, 202);
 }
 
 .list-style-clip .clip-image {
-	
+	position: relative;
+	height: auto;
+	max-height: 100%;
+	width: 100%;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 .list-style-clip .clip-info {
@@ -168,7 +174,7 @@
 	height: 100%;
 	width: 70%;
 	padding: 8px;
-	background-color: rgb(248, 245, 235);
+	background-color: var(--secondary-bg-color);
 	border: 1px solid rgb(205, 204, 202);
 }
 
@@ -205,11 +211,11 @@
 	right: 0;
 	padding: 0 8px;
 	line-height: 44px;
-	background-color: #ddd7c5;
+	background-color: var(--main-header-color);
 }
 
 .list-style-clip:hover .clip-footer {
-	background-color: rgb(216, 210, 192);
+	background-color: var(--secondary-hover-color);
 }
 
 .list-style-clip #tags {

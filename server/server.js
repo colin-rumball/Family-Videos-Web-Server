@@ -18,6 +18,7 @@ var {mongoose} = require('./db/mongoose');
 var {Clip} = require('./models/Clip');
 var {User} = require('./models/User');
 var {isLoggedIn} = require('./middleware/middleware');
+var {checkAuthToken} = require('./middleware/middleware');
 var {getMessageObject} = require('./message-handler/message-handler');
 
 const SERVER_PORT = process.env.PORT;
@@ -199,10 +200,13 @@ app.post('/upload', isLoggedIn, (req, res) => {
 					var newId = doc._id;
 					
 					// Move file to uploading dir
-					fse.move(filePath, path.join(PATH_TO_CLIPS, 'uploading', files[i]))
+					fse.move(path.join(PATH_TO_CLIPS, doc.file_name), path.join(PATH_TO_CLIPS, 'uploading', files[i]))
 					.then(() => {
 						// done moving
 						request({
+							headers: {
+								'x-auth': process.env.MASTER_AUTH_TOKEN
+							},
 							method: 'POST',
 							url: process.env.YOUTUBE_URL + '/uploads',
 							json: {
@@ -225,7 +229,7 @@ app.post('/upload', isLoggedIn, (req, res) => {
 
 // ------ PATCH
 
-app.patch('/video/:Id', (req, res) => {
+app.patch('/video/:Id', checkAuthToken, (req, res) => {
 	var id = req.params.Id;
 	var body = req.body;
 
@@ -257,6 +261,20 @@ app.patch('/video/:Id', (req, res) => {
 			})
 			.catch((e) => {
 
+			});
+		} else {
+			request({
+				headers: {
+					'x-auth': process.env.MASTER_AUTH_TOKEN
+				},
+				method: 'PATCH',
+				url: process.env.YOUTUBE_URL + '/videos',
+				json: {
+					videoId: body.youtube_id,
+					title: body.title,
+					description: body.members.toString() || clip.members.toString(),
+					tags: body.tags.toString() || clip.tags.toString()
+				}
 			});
 		}
 		res.sendStatus(200);

@@ -3,6 +3,8 @@
 	--main-header-color: #ABD4E5;
 	--secondary-bg-color: #e9f8ff;
 	--main-text-color: #212529;
+	--main-hover-color: #9dc3d3;
+	--secondary-hover-color: #89b0c0;
 }
 
 html {
@@ -26,6 +28,12 @@ body {
 	line-height: 50px;
 	margin-bottom: 3vh;
 	border-bottom: 1px dotted var(--main-text-color);
+}
+
+.family-videos-nav img {
+	padding-bottom: 10px;
+	height: 40px;
+	width: auto;
 }
 
 .family-videos-nav a {
