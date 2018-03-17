@@ -11,16 +11,19 @@
 
 <div class="col-sm-12 list-style-clip {{#ifCond listStyle 'grid'}}hidden{{/ifCond}}">
 	<div class="clip" id="{{_id}}">
-		<img class="clip-image" src="http://img.youtube.com/vi/{{youtube_id}}/0.jpg" alt="">
+		<div class="clip-image-container">
+			{{!-- <img class="clip-image" src="http://img.youtube.com/vi/{{youtube_id}}/0.jpg" alt=""> --}}
+		</div>
 		<div class="clip-info">
 			<div id="title"><strong>{{title}}</strong></div>
 			<span id="year">{{year}}</span>
 			<div id="location">{{location}}</div>
 			<div id="family-members">{{members}}</div>
+			<div class="clip-footer">
+				<span id="tags">{{tags}}</span>
+				<span id="rating">&#9733;{{rating}}</span>
+			</div>
 		</div>
-		<div class="clip-footer">
-			<span id="tags">{{tags}}</span>
-			<span id="rating">&#9733;{{rating}}</span>
-		</div>
+		
 	</div>
 </div>

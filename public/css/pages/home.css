@@ -8,7 +8,7 @@
 }
 
 .query-search-box {
-	width: 80%;
+	width: calc(100% - 45px);
 	height: 45px;
 	line-height: 40px;
 	padding: 0 7px;
@@ -31,6 +31,7 @@
 	font-size: 20px;
 	padding: 0 10px;
 	height: 100%;
+	line-height: 45px;
 }
 
 .query-options span:not(:last-child) {
@@ -101,18 +102,19 @@
 /* GRID STYLE */
 
 .grid-style-clip .clip {
+	position: relative;
 	width: 100%;
 	margin: 3% 0;
 }
 
 .grid-style-clip .clip-info {
 	position: absolute;
-	left: 3%;
-	padding: 7px;
 	top: 60%;
-	width: 94%;
-	height: 37%;
-	background-color: rgb(248, 245, 235);
+	left: 0;
+	bottom: 0;
+	right: 0;
+	padding: 7px;
+	background-color: var(--secondary-bg-color);
 	border: 1px solid rgb(205, 204, 202);
 }
 
@@ -139,48 +141,50 @@
 }
 
 .list-style-clip .clip {
+	position: relative;
 	width: 100%;
-	height: 190px;
-	margin: 1% 0;
+	height: 25vh;
+	min-height: 180px;
+	margin: 1vh 0;
+}
+
+.list-style-clip .clip-image-container {
+	position: relative;
+	display: block;
+	float: left;
+	height: 100%;
+	width: 30%;
+	padding: 0px;
+	background-color: rgb(248, 245, 235);
 }
 
 .list-style-clip .clip-image {
-	float: left;
-	height: 100%;
-	width: auto;
-	padding-right: 10px;
+	
 }
 
 .list-style-clip .clip-info {
-	padding: 7px 0;
-	width: 100%;
-	height: calc(100% - 44px);
+	position: relative;
+	float: right;
+	height: 100%;
+	width: 70%;
+	padding: 8px;
 	background-color: rgb(248, 245, 235);
 	border: 1px solid rgb(205, 204, 202);
 }
 
-.list-style-clip .clip-footer {
-	width: 100%;
-	line-height: 44px;
-	background-color: #ddd7c5;
-}
-
-.list-style-clip:hover .clip-footer {
-	background-color: rgb(216, 210, 192);
-}
-
 .list-style-clip #title {
 	font-size: 20px;
-	width: 92%;
+	width: 90%;
 	white-space: nowrap;
+	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
 .list-style-clip #year {
 	position: absolute;
 	font-size: 18px;
-	right: 26px;
-	top: 20px;
+	right: 8px;
+	top: 8px;
 }
 
 .list-style-clip #location {
@@ -191,7 +195,21 @@
 
 .list-style-clip #family-members {
 	font-size: 18px;
-	padding-top: 20px;
+	padding-top: 10px;
+}
+
+.list-style-clip .clip-footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 0 8px;
+	line-height: 44px;
+	background-color: #ddd7c5;
+}
+
+.list-style-clip:hover .clip-footer {
+	background-color: rgb(216, 210, 192);
 }
 
 .list-style-clip #tags {
@@ -199,10 +217,7 @@
 }
 
 .list-style-clip #rating {
-	font-size: 18px;
-	position: absolute;
-	right: 28px;
-	bottom: 10px;
+	float: right;
 }
 
 /* PAGING */
@@ -235,4 +250,28 @@
 .hidden {
 	display: none;
 	height: 1px;
+}
+
+@media only screen and (max-width: 770px) {
+	#list-style-buttons {
+		display: none;
+		width: 1px;
+	}
+	
+	#number-of-results {
+		display: none;
+	}
+
+	.query-options {
+		overflow: visible;
+		word-wrap: none;
+		white-space: nowrap;
+	}
+
+	.query-options span {
+		padding: 0;
+		overflow: visible;
+		word-wrap: none;
+		white-space: nowrap;
+	}
 }

@@ -15,34 +15,16 @@
 			<iframe align="middle" src="https://www.youtube.com/embed/{{clip.youtube_id}}?rel=0&amp;showinfo=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 		</div>
 		<div class="video-info" id="video-info">
-			<div class="row">
-				<span class="col-lg-10">
-					<h2 id="video-title">
-						<strong>{{clip.title}}</strong>
-					</h2>
-				</span>
-				<span class="col-lg-2">
-					<p id="video-year">{{clip.year}}</p>
-				</span>
-			</div>
-			<div class="row">
-				<span class="col-lg-12">
-					<p id="video-location">{{clip.location}}</p>
-				</span>
-			</div>
-			<div class="row">
-				<span class="col-lg-12">
-					<p id="video-family-members">{{clip.members}}</p>
-				</span>
-			</div>
-			<div class="row video-info-footer">
-				<span class="col-lg-10">
-					<p id="video-tags">{{clip.tags}}</p>
-				</span>
-				<span class="col-lg-2">
-					<p id="video-rating">
-						<i class="fa fa-star"></i> {{clip.rating}}</p>
-				</span>
+			<h3 id="video-title">
+				<strong>{{clip.title}}</strong>
+			</h3>
+			<p id="video-year">{{clip.year}}</p>
+			<p id="video-location">{{clip.location}}</p>
+			<p id="video-family-members">{{clip.members}}</p>
+			<div class="video-info-footer">
+				<span id="video-tags">{{clip.tags}}</span>
+				<span id="video-rating">
+					<i class="fa fa-star"></i> {{clip.rating}}</span>
 			</div>
 			{{# if isAuth}}
 				<input type="button" value="Edit Info" class="btn btn-info edit-video-info-button" id="edit-video-info-button"> 

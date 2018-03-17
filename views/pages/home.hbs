@@ -12,17 +12,17 @@
 		{{!-- QUERIES --}}
 		<form method="GET" action="/" id="query-form" class="query-form">
 			<div class="row">
-				<div class="col-lg-5 col-md-4 col-sm-12 query-search-box-container">
-					<input type="text" name="title" id="SearchQuery" class="query-search-box" placeholder="Search...">
+				<div class="col-lg-5 col-md-5 col-sm-10 query-search-box-container">
+					<input type="text" name="title" id="SearchQuery" class="query-search-box" placeholder="Search..." autocomplete="off">
 					<button type="submit" class="query-search-button" id="query-search-button">
 						<i class="fa fa-search"></i>
 					</button>
 				</div>
 
-				<div class="col-lg-7 col-md-8 col-sm-12">
+				<div class="col-lg-7 col-md-7 col-sm-2">
 					<div class="query-options">
-						<span>{{#unless isRandom}}{{numResults}} Videos{{/unless}}</span>
-						<span>
+						<span id="number-of-results">{{#unless isRandom}}{{numResults}} Videos{{/unless}}</span>
+						<span id="list-style-buttons">
 							<button class="btn btn-info {{#ifCond listStyle 'grid'}}active{{/ifCond}}" id="grid-view-button">
 								<i class="fa fa-th"></i>
 							</button>
