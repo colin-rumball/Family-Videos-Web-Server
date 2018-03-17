@@ -213,6 +213,19 @@
 					<input type="text" name="mongo_id" id="edited-mongoId" value="{{clip._id}}" disabled>
 				</div>
 			</div>
+			<div class="row">
+				<h4 class="col-sm-12">State</h4>
+				<div class="col-sm-12">
+					<label class="radiobutton">Unlisted
+						<input class="edited-state" type="radio" name="state" value="unlisted" {{#ifCond clip.state 'unlisted'}}checked{{/ifCond}}>
+						<span class="radiobutton-inner"></span>
+					</label>
+					<label class="radiobutton">Listed
+						<input class="edited-state" type="radio" name="state" value="listed" {{#ifCond clip.state 'listed'}}checked{{/ifCond}}>
+						<span class="radiobutton-inner"></span>
+					</label>
+				</div>
+			</div>
 			<br>
 			{{!-- <div class="row">
 				<h2 class="col-sm-12">Advanced</h2>

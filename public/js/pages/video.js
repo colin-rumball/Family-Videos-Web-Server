@@ -18,6 +18,7 @@ $(function () {
 		var famMembers = [];
 		var entertainmentRating;
 		var tags = [];
+		var state;
 
 		title = $('#edited-title').val();
 
@@ -54,6 +55,13 @@ $(function () {
 			}
 		});
 
+		$(".edited-state").each(function (index) {
+			if (this.checked) {
+				state = this.value;
+				return false;
+			}
+		});
+
 		var youtubeId = $('#edited-youtubeId').val();
 
 		var mongo_id = $('#edited-mongoId').val();
@@ -66,7 +74,7 @@ $(function () {
 			rating: entertainmentRating,
 			tags: tags,
 			youtube_id: youtubeId,
-			state: 'listed'
+			state: state
 		};
 
 		$.ajax({
