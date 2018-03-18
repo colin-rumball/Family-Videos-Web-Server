@@ -390,7 +390,7 @@ var createClipsObject = function(clips, pageNumber, listStyle) {
 		}
 
 		if (clip.tags) {
-			clip.tags = clip.tags.join(',');
+			clip.tags = clip.tags.join(', ');
 		}
 
 		// Eww
