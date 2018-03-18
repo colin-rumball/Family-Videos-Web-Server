@@ -108,10 +108,10 @@ app.get('/video/:id', (req, res) => {
 	
 	Clip.findById(mongo_id).then((clip) => {
 		if (clip.members) {
-			clip.members = clip.members.join(', ');
+			clip.membersString = clip.members.join(', ');
 		}
 		if (clip.tags) {
-			clip.tags = clip.tags.join(', ');
+			clip.tagsString = clip.tags.join(', ');
 		}
 		renderTemplateToResponse(req, res, 'pages/video', { clip })
 	}).catch((e) => {
@@ -275,6 +275,11 @@ app.patch('/video/:Id', checkAuthToken, (req, res) => {
 					description: body.members.toString() || clip.members.toString(),
 					tags: body.tags.toString() || clip.tags.toString()
 				}
+			})
+			.then(() => {
+			})
+			.catch((err) => {
+				
 			});
 		}
 		res.sendStatus(200);

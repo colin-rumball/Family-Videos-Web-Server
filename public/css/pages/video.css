@@ -47,6 +47,7 @@
 
 .video-info-footer {
 	position: relative;
+	overflow: auto;
 	background-color: var(--main-header-color);
 	line-height: 20px;
 	font-size: 20px;
@@ -58,6 +59,7 @@
 }
 
 #video-rating {
+	position: relative;
 	float: right;
 }
 
