@@ -312,7 +312,8 @@ var clipSort_year = function(a, b) {
 function createHomeParameters(queries, mongoClips) {
 	var obj = {};
 	obj.listStyle = queries.listStyle ? queries.listStyle : 'grid';
-	obj.numResults = mongoClips.length
+	obj.numResults = mongoClips.length;
+	obj.title = queries.title;
 	obj.years = [
 		{ year: 'Any Year', selected: queries.year === 'Any Year' || _.isEmpty(queries) },
 		{ year: '1991', selected: queries.year === '1991' },
