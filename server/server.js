@@ -347,7 +347,7 @@ function createHomeParameters(queries, mongoClips) {
 	obj.locations = [
 		{ location: 'Any Place', selected: queries.location === undefined ? _.isEmpty(queries) : queries.location.includes('Any Place') },
 		{ location: 'Horseshoe Valley', selected: queries.location === undefined ? false : queries.location.includes('Horseshoe Valley') },
-		{ location: "Papa and Grandma's", selected: queries.location === undefined ? false : queries.location.includes("Papa and Grandma's") },
+		{ location: "Papa & Grandma's", selected: queries.location === undefined ? false : queries.location.includes("Papa & Grandma's") },
 		{ location: 'Rumball House', selected: queries.location === undefined ? false : queries.location.includes('Rumball House') },
 		{ location: 'Lean House', selected: queries.location === undefined ? false : queries.location.includes('Lean House') },
 		{ location: 'Cobourg', selected: queries.location === undefined ? false : queries.location.includes('Cobourg') }
