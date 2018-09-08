@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
-const clipSchema = new mongoose.Schema({
+var Clip = mongoose.model('Clip', {
     tape_id: {
         type: Number,
         required: true
@@ -49,6 +49,6 @@ const clipSchema = new mongoose.Schema({
 	}
 });
 
-const Clip = mongoose.model('Clip', clipSchema);
-
-module.exports = Clip;
+module.exports = {
+    Clip
+};

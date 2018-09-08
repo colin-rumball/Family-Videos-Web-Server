@@ -1,12 +1,13 @@
-const fse = require('fs-extra'),
-	path = require('path');
+const fse = require('fs-extra');
 
-const messages = fse.readJsonSync(path.join(__dirname, '/messages.json'));
+var messages;
+
+messages = fse.readJsonSync(__dirname + '/messages.json', );
 
 function getMessageObject(code, options) {
-	const ret = messages[code];
-	if (options !== undefined && ret !== undefined) {
-		for (let i = 0; i < options.length; i++) {
+	var ret = messages[code];
+	if (options != undefined && ret != undefined) {
+		for (var i = 0; i < options.length; i++) {
 			ret.DESCRIPTION = ret.DESCRIPTION.replace(`[${i}]`, options[i]);
 		}
 	}
@@ -15,4 +16,4 @@ function getMessageObject(code, options) {
 
 module.exports = {
 	getMessageObject
-};
+}

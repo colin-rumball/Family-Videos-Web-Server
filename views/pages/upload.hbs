@@ -4,37 +4,21 @@
 <head>
 	{{> head }}
 	{{!-- <link rel="stylesheet" type="text/css" href="/public/css/pages/home.css"> --}}
-	<link rel="stylesheet" href="/public/css/libs/basic.min.css">
-    <link rel="stylesheet" href="/public/css/libs/dropzone.min.css">
-    <script src="/public/js/libs/dropzone.min.js"></script>
 	<script src="/public/js/pages/upload.js"></script>
-	<link rel="stylesheet" href="/public/css/table-style.css">
 	<title>Upload | Family Videos</title>
 </head>
 
 <body>
 	{{> nav this}}
 	<div class="container main-content">
-		<h2>Local Uploads</h2>
-		<div id="upload-widget" class="dropzone"></div>
-		{{!-- YOUTUBE UPLOADS --}}
-		<div class="upload-page-content" id="upload-page-content">
-			<h2>Current YouTube Uploads</h2>
-			<table class="table" id="uploads-table">
-				<thead>
-					<tr>
-						<th scope="col">Id</th>
-						<th scope="col">Status</th>
-						<th scope="col">Filename</th>
-						<th scope="col">Size</th>
-						<th scope="col">YouTube Id</th>
-						<th scope="col">Progress</th>
-					</tr>
-				</thead>
-				<tbody id="uploads-table-body">
-				</tbody>
-			</table>
+		<div class="row">
+			<ul>
+				{{#each files}}
+				<li class="clip-file" id="{{this}}">{{this}}</li>
+				{{/each}}
+			</ul>
 		</div>
+		<input type="button" class="btn btn-info" id="upload-button" value="Upload All">
 	</div>
 	 {{> footer this}}
 </body>
