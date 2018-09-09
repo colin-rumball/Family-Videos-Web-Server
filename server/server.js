@@ -132,7 +132,6 @@ app.post('/register', isLoggedIn, (req, res) => {
 	});
 });
 
-
 app.post('/sign-in', passport.authenticate('local', {
 	successReturnToOrRedirect: '/',
 	failureRedirect: '/sign-in'
