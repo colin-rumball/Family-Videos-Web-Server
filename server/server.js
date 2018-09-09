@@ -150,6 +150,7 @@ app.get('/*', (req, res) => {
 	renderMessageToResponse(req, res, 'PAGE_NOT_FOUND');
 });
 
+
 // ------ POST
 
 app.post('/register', isLoggedIn, (req, res) => {
