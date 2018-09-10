@@ -1,20 +1,20 @@
-const express = require('express'),
-    {ObjectID} = require('mongodb'),
-    path = require('path'),
-    fse = require('fs-extra'),
-    request = require('request-promise-native'),
-    Clip = require('./../models/Clip'),
-    Utils = require('./../utils/utils'),
-    {checkAuthToken, isLoggedIn} = require('./../middleware/middleware');
+const express = require('express');
+// const {ObjectID} = require('mongodb');
+const path = require('path');
+const fse = require('fs-extra');
+const request = require('request-promise-native');
+const Clip = require('./../models/Clip');
+const Utils = require('./../utils/utils');
+const {checkAuthToken, isLoggedIn} = require('./../middleware/middleware');
 
 const router = express.Router();
 
 router.route('/:id')
     .get(async (req, res) => {
         const mongoId = req.params.id;
-        if (!ObjectID.isValid(mongoId)) {
+        /*if (!ObjectID.isValid(mongoId)) {
             return Utils.renderMessageToResponse(req, res, 'INVALID_VIDEO_ID', [mongoId]);
-        }
+        }*/
         return Clip.findById(mongoId).then((clip) => {
             if (clip.members) {
                 clip.membersString = clip.members.join(', ');
