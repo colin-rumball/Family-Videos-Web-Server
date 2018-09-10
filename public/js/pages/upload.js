@@ -54,7 +54,7 @@ $(() => {
                 else {
                     if (noTorrentsMessage.length == 0) {
                         $('#uploads-table-body').html("");
-                        $('#uploads-table-body').after('<h3 id="no-torrents">No torrents to show</h3>')
+                        $('#uploads-table-body').after('<h3 id="no-torrents">No uploads to show</h3>')
                     }
                 }
             }, false);
