@@ -11,7 +11,7 @@ $(() => {
         fetch('/youtube-url')
         .then(response => response.json())
         .then((responseJson) => {
-            const source = new EventSource(responseJson.youtube_url + '/uploads-stream', {withCredentials: true});
+            const source = new EventSource(responseJson.youtube_url + '/uploads-stream');
 
             source.addEventListener('message', function (e) {
                 $("#torrents-table-body").html();
