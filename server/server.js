@@ -8,23 +8,22 @@ const express = require('express'),
 	hbs = require('hbs'),
 	_ = require('lodash'),
 	favicon = require('serve-favicon'),
-	path = require('path'),
-	https = require('https');
+	path = require('path');
 
 const {mongoose} = require('./db/mongoose');
 const Clip = require('./models/Clip');
 const {User} = require('./models/User');
 const Utils = require('./utils/utils');
-const {isLoggedIn} = require('./middleware/middleware');
 
 // ROUTERS
 const uploadRouter = require('./routers/upload-router');
 const videoRouter = require('./routers/video-router');
+const authRouter = require('./routers/auth-router');
 
 const app = express();
 // if this isn't working then it's likely a naming issue
 hbs.registerPartials(path.join(__dirname, '..', 'views', 'partials'), () => {
-	console.log('Partials registered!');
+	console.log('HBS Partials registered!');
 	app.listen(process.env.PORT, () => {
 		console.log(`Started Family Video Server on port: ${process.env.PORT} with env: ${process.env.node_env}`);
 	});
@@ -36,19 +35,27 @@ app.use(require('express-session')({
 	saveUninitialized: false
 }));
 
+// Files
 app.use('/public', express.static(path.join(__dirname, '..', 'public')));
+
+// Favicon
 app.use(favicon(path.join(__dirname, 'favicon', 'favicon.ico')));
+
+// Templating
 app.set('views', path.join(__dirname, '..', 'views'));
 app.set('view engine', 'hbs');
+
+// User Auth
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Templating Helper Functions
 hbs.registerHelper('ifCond', (v1, v2, options) => {
 	if (v1 === v2) {
 		return options.fn(this);
@@ -66,6 +73,7 @@ hbs.registerHelper('ifContains', (v1, v2, options) => {
 // =======================================================================
 // ------ ROUTERS
 
+app.use('/', authRouter);
 app.use('/video', videoRouter);
 app.use('/upload', uploadRouter);
 
@@ -102,14 +110,6 @@ app.get('/', (req, res) => {
 	}
 });
 
-app.get('/sign-in', (req, res) => {
-	Utils.renderTemplateToResponse(req, res, 'pages/sign-in', {});
-});
-
-app.get('/register', isLoggedIn, (req, res) => {
-	Utils.renderTemplateToResponse(req, res, 'pages/register', {});
-});
-
 app.get('/youtube-url', (req, res) => {
 	res.send({youtube_url: process.env.YOUTUBE_URL});
 });
@@ -117,40 +117,3 @@ app.get('/youtube-url', (req, res) => {
 app.get('/*', (req, res) => {
 	Utils.renderMessageToResponse(req, res, 'PAGE_NOT_FOUND');
 });
-
-// ------ POST
-
-app.post('/register', isLoggedIn, (req, res) => {
-	User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
-		if (err) {
-			return Utils.renderMessageToResponse(req, res, 'UNKNOWN_ERROR');
-		}
-
-		return passport.authenticate('local')(req, res, () => {
-			res.redirect('/');
-		});
-	});
-});
-
-
-app.post('/sign-in', passport.authenticate('local', {
-	successReturnToOrRedirect: '/',
-	failureRedirect: '/sign-in'
-}));
-
-// =======================================================================
-// SSL STUFF
-// var key = fse.readFileSync(__dirname + '/certificates/private.key');
-// var cert = fse.readFileSync(__dirname + '/certificates/certificate.crt');
-// var ca = fse.readFileSync(__dirname + '/certificates/ca_bundle.crt');
-
-// var options = {
-// 	key: key,
-// 	cert: cert,
-// 	ca: ca
-// };
-
-// https.createServer(options, app).listen(SERVER_PORT, () => {
-// 	console.log('Started Main Server on port', SERVER_PORT);
-// });
-// =======================================================================

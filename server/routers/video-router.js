@@ -1,20 +1,14 @@
 const express = require('express');
-// const {ObjectID} = require('mongodb');
-const path = require('path');
-const fse = require('fs-extra');
 const request = require('request-promise-native');
 const Clip = require('./../models/Clip');
 const Utils = require('./../utils/utils');
-const {checkAuthToken, isLoggedIn} = require('./../middleware/middleware');
+const {isLoggedIn} = require('./../middleware/middleware');
 
 const router = express.Router();
 
 router.route('/:id')
     .get(async (req, res) => {
         const mongoId = req.params.id;
-        /*if (!ObjectID.isValid(mongoId)) {
-            return Utils.renderMessageToResponse(req, res, 'INVALID_VIDEO_ID', [mongoId]);
-        }*/
         return Clip.findById(mongoId).then((clip) => {
             if (clip.members) {
                 clip.membersString = clip.members.join(', ');
@@ -31,6 +25,7 @@ router.route('/:id')
         const {id} = req.params;
         let {body} = req;
 
+        // Clear empty arrays
         if (body.members) {
             body.members = body.members.length > 0 ? body.members : undefined;
         }
@@ -41,15 +36,18 @@ router.route('/:id')
         // Remove undefined values
         body = JSON.parse(JSON.stringify(body));
 
-        Clip.findByIdAndUpdate(id, body).then((clip) => {
+        try {
+            // Update the DB with the new info
+            const clip = await Clip.findByIdAndUpdate(id, body);
             if (!clip) {
                 return res.sendStatus(404);
             }
 
-            if (clip.state === 'uploading')
+            // Update the info on YouTube as well if it was a user change.
+            // (Only for consistency, not required for the service to work)
+            if (clip.state !== 'uploading')
             {
-            } else {
-                request({
+                const requestOptions = {
                     headers: {
                         'x-auth': process.env.MASTER_AUTH_TOKEN
                     },
@@ -61,25 +59,25 @@ router.route('/:id')
                         description: body.members.toString() || clip.members.toString(),
                         tags: body.tags.toString() || clip.tags.toString()
                     }
-                })
-                .then(() => {
-                })
-                .catch((err) => {
-                    
-                });
+                };
+                request(requestOptions);
             }
-            res.sendStatus(200);
-        }).catch((err) => {
-            res.sendStatus(500);
-        });
+
+            return res.sendStatus(200);
+        } catch (err) {
+            return res.sendStatus(500);
+        }
     });
 
-router.get('.json', isLoggedIn, (req, res) => {
-    Clip.find({}).then((mongoClips) => {
+// Returns a json representation of the entire DB
+router.get('.json', isLoggedIn, async (req, res) => {
+    try {
+        const mongoClips = await Clip.find({});
         res.send({ videos: mongoClips });
-    }, (err) => {
+    }
+    catch (err) {
         Utils.renderMessageToResponse(req, res, 'NO_DATABASE_RESPONSE');
-    });
+    }
 });
 
 module.exports = router;

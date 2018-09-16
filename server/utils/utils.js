@@ -11,6 +11,7 @@ const clipSort_year = (a, b) => a.year - b.year;
 const Utils = {
     renderTemplateToResponse(req, res, page, obj) {
         obj.isAuth = req.isAuthenticated();
+        obj.versionNumber = process.env.VERSION_NUMBER;
         if (!_.isEmpty(hbs.handlebars.partials)) {
             res.render(page, obj);
         } else {
