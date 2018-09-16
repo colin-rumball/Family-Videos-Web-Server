@@ -8,8 +8,28 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
-			"program": "${workspaceFolder}\\server/server.js"
+			"name": "Debug Locally",
+			"program": "${workspaceFolder}/server/server.js",
+			"args": [
+				"${workspaceFolder}/config/config.js"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Unit Tests",
+			"address": "localhost",
+			"port": 5858,
+			"sourceMaps": false
+		},
+		{
+			"type": "node",
+			"request": "attach",
+			"name": "Attach to remote dev server",
+			"address": "localhost",
+			"port": 4000,
+			"localRoot": "${workspaceFolder}",
+    		"remoteRoot": "C:\\Websites\\Family-Videos-Web-Server_Dev"
 		}
 	]
 }
