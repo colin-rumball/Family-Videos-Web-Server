@@ -70,15 +70,12 @@ hbs.registerHelper('ifContains', (v1, v2, options) => {
 	return options.inverse(this);
 });
 
-// =======================================================================
-// ------ ROUTERS
-
+// Routers
 app.use('/', authRouter);
 app.use('/video', videoRouter);
 app.use('/upload', uploadRouter);
 
-// ------ GET
-
+// Default/Root Route
 app.get('/', (req, res) => {
 	const queries = req.query;
 	let mongoQuery = {};
@@ -110,10 +107,12 @@ app.get('/', (req, res) => {
 	}
 });
 
+// Simple request for current url for youtube uploads
 app.get('/youtube-url', (req, res) => {
 	res.send({youtube_url: process.env.YOUTUBE_URL});
 });
 
+// Catch all
 app.get('/*', (req, res) => {
 	Utils.renderMessageToResponse(req, res, 'PAGE_NOT_FOUND');
 });
